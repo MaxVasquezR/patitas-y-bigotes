@@ -1,0 +1,24 @@
+<div class="citas-banner" *ngIf="visible()" role="alert" aria-live="polite">
+  <div class="citas-banner-inner">
+    <div class="citas-banner-icon">
+      <i class="bi bi-bell-fill"></i>
+    </div>
+    <div class="citas-banner-track">
+      <div
+        class="citas-banner-item"
+        *ngFor="let item of citas(); trackBy: trackById"
+        [ngClass]="claseUrgencia(item)"
+      >
+        <div class="citas-banner-text">
+          <strong>{{ item.etiqueta }}</strong>
+          <small>{{ item.cita.veterinario }} · {{ item.cita.nombreDueno }}</small>
+        </div>
+        <div class="citas-banner-actions" *ngIf="item.cita.estado !== 'completada'">
+          <button type="button" class="btn btn-sm btn-light" *ngIf="item.cita.estado === 'pendiente'" (click)="confirmar(item, $event)">Confirmar</button>
+          <button type="button" class="btn btn-sm btn-success" (click)="atender(item, $event)">Atender</button>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-link citas-banner-link" (click)="verAgenda()">Ver agenda</button>
+  </div>
+</div>

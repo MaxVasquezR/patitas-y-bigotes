@@ -1,0 +1,14 @@
+.dashboard-hero {
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--bs-box-shadow-sm);
+}
+
+.dashboard-clock {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bs-primary);
+  text-transform: capitalize;
+}

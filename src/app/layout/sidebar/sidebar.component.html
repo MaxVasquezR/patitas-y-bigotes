@@ -1,0 +1,43 @@
+<aside class="sidebar" [class.sidebar-open]="sidebarService.abierto()">
+  <div class="sidebar-brand">
+    <i class="bi bi-hospital"></i>
+    <div>
+      <span class="brand-name">{{ clinicaNombre }}</span>
+      <span class="brand-tagline">{{ clinicaTagline }}</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of navItems()"
+      [routerLink]="item.ruta"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: !!item.exact }"
+      class="sidebar-link"
+      (click)="cerrar()"
+    >
+      <i class="bi {{ item.icono }}"></i>
+      <span>{{ item.etiqueta }}</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-user" *ngIf="auth.sesion() as sesion">
+    <div class="user-info">
+      <i class="bi bi-person-circle"></i>
+      <div class="min-w-0">
+        <strong class="d-block text-truncate small">{{ sesion.nombre }}</strong>
+        <app-role-badge></app-role-badge>
+      </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-light w-100 mt-2" (click)="logout()">
+      <i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <small>Sistema de gestión clínica</small>
+    <small class="text-muted">v2.0 · Patitas y Bigotes</small>
+  </div>
+</aside>
+
+<div class="sidebar-backdrop" [class.show]="sidebarService.abierto()" (click)="cerrar()"></div>

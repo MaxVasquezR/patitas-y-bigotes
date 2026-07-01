@@ -1,0 +1,37 @@
+<header class="topbar">
+  <button type="button" class="btn btn-link topbar-toggle d-lg-none" (click)="sidebarService.toggle()" aria-label="Menú">
+    <i class="bi bi-list fs-4"></i>
+  </button>
+  <div class="topbar-search flex-grow-1" (click)="$event.stopPropagation()">
+    <div class="input-group input-group-sm">
+      <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+      <input
+        type="search"
+        class="form-control border-start-0"
+        placeholder="Buscar mascotas, propietarios o citas..."
+        [formControl]="busquedaControl"
+        (focus)="mostrarResultados.set(busquedaControl.value.trim().length >= 2)"
+        (blur)="cerrarBusqueda()"
+      />
+    </div>
+    <div class="search-dropdown card shadow-sm" *ngIf="mostrarResultados() && resultados().length">
+      <button
+        type="button"
+        class="search-item"
+        *ngFor="let r of resultados()"
+        (mousedown)="irA(r)"
+      >
+        <i class="bi {{ iconoTipo(r.tipo) }}"></i>
+        <div>
+          <strong class="d-block small">{{ r.titulo }}</strong>
+          <small class="text-muted">{{ r.subtitulo }}</small>
+        </div>
+      </button>
+    </div>
+    <div class="search-dropdown card shadow-sm p-3 text-muted small" *ngIf="mostrarResultados() && !resultados().length">
+      Sin resultados
+    </div>
+  </div>
+
+  <app-role-badge class="d-none d-md-inline-flex flex-shrink-0"></app-role-badge>
+</header>

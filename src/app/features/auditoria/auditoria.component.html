@@ -1,0 +1,39 @@
+<div class="page-shell">
+  <app-page-header
+    titulo="Registro de actividad"
+    subtitulo="Auditoría de acciones del sistema (solo administrador)"
+    icono="bi-shield-check"
+    accionTexto="Volver"
+    accionLink="/dashboard"
+    accionIcono="bi-arrow-left"
+    accionVariant="outline"
+  ></app-page-header>
+
+  <div class="card border-0 shadow-sm">
+    <div class="table-responsive" *ngIf="registros().length; else vacio">
+      <table class="table table-hover table-sm mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Acción</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of registros(); trackBy: trackById">
+            <td class="text-nowrap small">{{ r.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ r.usuario }}</td>
+            <td><span class="badge bg-secondary">{{ r.rol }}</span></td>
+            <td><span class="badge bg-primary-subtle text-primary">{{ r.accion }}</span></td>
+            <td class="small text-muted">{{ r.detalle }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #vacio>
+      <p class="text-muted text-center py-5 mb-0">No hay registros de actividad aún</p>
+    </ng-template>
+  </div>
+</div>

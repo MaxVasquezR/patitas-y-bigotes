@@ -1,0 +1,132 @@
+<div class="page-shell">
+  <app-page-header
+    titulo="Agenda de citas"
+    subtitulo="Calendario y gestión de consultas veterinarias"
+    icono="bi-calendar3"
+    accionTexto="Nueva cita"
+    accionLink="/citas/nueva"
+  ></app-page-header>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <app-stat-card [valor]="citasDelDia().length" etiqueta="Hoy" icono="bi-calendar-day" color="primary"></app-stat-card>
+    </div>
+    <div class="col-md-4">
+      <app-stat-card [valor]="proximasCitas().length" etiqueta="Próximas" icono="bi-hourglass-split" color="warning"></app-stat-card>
+    </div>
+    <div class="col-md-4">
+      <app-stat-card [valor]="citas().length" etiqueta="Total" icono="bi-bar-chart" color="info"></app-stat-card>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="btn btn-sm btn-outline-primary" (click)="cambiarMes(-1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <strong class="text-capitalize">{{ mesAnio }}</strong>
+            <button class="btn btn-sm btn-outline-primary" (click)="cambiarMes(1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="cal-dias-semana d-grid mb-2" style="grid-template-columns: repeat(7, 1fr)">
+            <span class="text-center small text-muted fw-semibold" *ngFor="let d of diasSemana">{{ d }}</span>
+          </div>
+
+          <div class="cal-grid d-grid gap-1" style="grid-template-columns: repeat(7, 1fr)">
+            <ng-container *ngFor="let dia of diasDelMes(); trackBy: trackByDia">
+              <span *ngIf="dia.vacio" class="cal-dia-vacio"></span>
+              <button
+                *ngIf="!dia.vacio"
+                class="cal-dia btn btn-sm"
+                [class.btn-primary]="dia.fecha === fechaSeleccionada()"
+                [class.btn-outline-secondary]="dia.fecha !== fechaSeleccionada()"
+                [class.border-success]="esHoy(dia.fecha) && dia.fecha !== fechaSeleccionada()"
+                [class.cal-ocupado]="tieneCitas(dia.fecha) && !citasCanceladas(dia.fecha)"
+                [class.cal-cancelado]="citasCanceladas(dia.fecha)"
+                (click)="seleccionarDia(dia.fecha)"
+              >
+                {{ dia.dia }}
+                <span *ngIf="tieneCitas(dia.fecha)" class="cal-dot"></span>
+              </button>
+            </ng-container>
+          </div>
+
+          <div class="mt-3 pt-3 border-top">
+            <label class="form-label small fw-semibold">Filtrar por estado</label>
+            <select class="form-select form-select-sm" [formControl]="filtroEstadoControl">
+              <option value="">Todos</option>
+              <option *ngFor="let e of estadosCita" [value]="e">{{ e | titlecase }}</option>
+            </select>
+          </div>
+
+          <div class="mt-3 d-flex flex-wrap gap-2 small">
+            <span class="badge bg-success-subtle text-success"><span class="cal-leyenda-dot bg-success"></span> Ocupado</span>
+            <span class="badge bg-secondary-subtle text-secondary"><span class="cal-leyenda-dot bg-secondary"></span> Libre</span>
+            <span class="badge bg-danger-subtle text-danger"><span class="cal-leyenda-dot bg-danger"></span> Cancelado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3 d-flex align-items-center gap-2">
+          <h2 class="h6 fw-semibold mb-0">
+            Citas del {{ fechaSeleccionada() | date:'dd/MM/yyyy':'':'es' }}
+          </h2>
+          <span class="badge bg-primary rounded-pill">{{ citasDelDia().length }}</span>
+        </div>
+        <div class="card-body pt-0">
+          <div *ngIf="citasDelDia().length > 0; else sinCitas">
+            <div
+              class="cita-card card mb-2 border-start border-4"
+              *ngFor="let c of citasDelDia(); trackBy: trackByCitaId"
+              [appCitaProxima]="c.fecha"
+              [estadoCita]="c.estado"
+            >
+              <div class="card-body d-flex flex-wrap gap-3">
+                <div class="cita-hora fw-bold text-primary">{{ c.hora }}</div>
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <strong>{{ c.nombreMascota }}</strong>
+                    <span class="badge bg-primary-subtle text-primary">{{ c.tipo | titlecase }}</span>
+                  </div>
+                  <p class="small text-muted mb-1">
+                    <i class="bi bi-person me-1"></i>{{ c.nombreDueno }}
+                    <span class="mx-1">·</span>
+                    <i class="bi bi-telephone me-1"></i>{{ c.telefonoDueno | telefono }}
+                  </p>
+                  <p class="small mb-1">{{ c.motivo }}</p>
+                  <p class="small text-muted mb-0"><i class="bi bi-heart-pulse me-1"></i>{{ c.veterinario }}</p>
+                  <p *ngIf="c.notas" class="small text-muted mb-0 mt-1"><i class="bi bi-sticky me-1"></i>{{ c.notas }}</p>
+                </div>
+                <div class="d-flex flex-column align-items-end gap-2">
+                  <span class="badge" [appEstadoBadge]="c.estado">{{ c.estado | estadoCita }}</span>
+                  <div class="d-flex flex-wrap gap-1 justify-content-end">
+                    <button *ngIf="asEntity(c).puedeConfirmarse()" (click)="cambiarEstado(c.id, 'confirmada')" class="btn btn-xs btn-success btn-sm">Confirmar</button>
+                    <button *ngIf="asEntity(c).puedeCompletarse()" (click)="completarCita(c)" class="btn btn-xs btn-primary btn-sm">Atender</button>
+                    <button *ngIf="asEntity(c).puedeCancelarse()" (click)="cambiarEstado(c.id, 'cancelada')" class="btn btn-xs btn-warning btn-sm">Cancelar</button>
+                    <a [routerLink]="['/citas', c.id, 'editar']" class="btn btn-xs btn-outline-secondary btn-sm"><i class="bi bi-pencil"></i></a>
+                    <button (click)="eliminar(c.id)" class="btn btn-xs btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #sinCitas>
+            <div class="text-center py-5 text-muted">
+              <i class="bi bi-calendar-x display-4 d-block mb-3"></i>
+              <p>No hay citas para este día</p>
+              <a routerLink="/citas/nueva" class="btn btn-primary btn-sm">Agendar cita</a>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

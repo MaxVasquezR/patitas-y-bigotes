@@ -1,0 +1,173 @@
+<div class="page-shell">
+  <div class="dashboard-hero mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+      <div>
+        <h1 class="h3 fw-semibold mb-1">Panel de control</h1>
+        <p class="text-muted small mb-1">{{ clinicaNombre }} — Bienvenido/a, {{ nombreUsuario() }}</p>
+        <app-role-badge></app-role-badge>
+      </div>
+      <div class="text-md-end">
+        <p class="dashboard-clock mb-0">{{ reloj() }}</p>
+        <small class="text-muted">{{ clinicaHorario }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-warning d-flex align-items-center gap-2 mb-4" *ngIf="citasAtrasadas().length">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span><strong>{{ citasAtrasadas().length }} cita(s) atrasada(s)</strong> sin completar — requieren seguimiento.</span>
+    <a routerLink="/citas" class="btn btn-sm btn-warning ms-auto">Revisar agenda</a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-xl-3">
+      <app-stat-card [valor]="totalMascotas()" etiqueta="Mascotas registradas" icono="bi-heart-pulse" color="primary"></app-stat-card>
+    </div>
+    <div class="col-6 col-xl-3">
+      <app-stat-card [valor]="totalPropietarios()" etiqueta="Propietarios" icono="bi-people" color="secondary"></app-stat-card>
+    </div>
+    <div class="col-6 col-xl-3">
+      <app-stat-card [valor]="citasHoy()" etiqueta="Citas hoy" icono="bi-calendar-day" color="success"></app-stat-card>
+    </div>
+    <div class="col-6 col-xl-3">
+      <app-stat-card [valor]="proximasCitas().length" etiqueta="Citas próximas" icono="bi-clock-history" color="info"></app-stat-card>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <h2 class="h6 fw-semibold text-muted text-uppercase mb-3" style="letter-spacing:0.04em">Accesos directos</h2>
+    <div class="row g-3">
+      <div class="col-6 col-lg-3">
+        <a routerLink="/mascotas/nueva" class="card action-card text-decoration-none h-100">
+          <div class="card-body">
+            <span class="action-icon bg-primary-subtle text-primary"><i class="bi bi-plus-lg"></i></span>
+            <strong class="d-block small">Nueva mascota</strong>
+            <small class="text-muted">Alta de paciente</small>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-lg-3">
+        <a routerLink="/propietarios/nuevo" class="card action-card text-decoration-none h-100">
+          <div class="card-body">
+            <span class="action-icon bg-secondary-subtle text-secondary"><i class="bi bi-person-plus"></i></span>
+            <strong class="d-block small">Nuevo propietario</strong>
+            <small class="text-muted">Registro de dueño</small>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-lg-3">
+        <a routerLink="/citas/nueva" class="card action-card text-decoration-none h-100">
+          <div class="card-body">
+            <span class="action-icon" style="background:rgba(30,126,90,.1);color:#1e7e5a"><i class="bi bi-calendar-plus"></i></span>
+            <strong class="d-block small">Agendar cita</strong>
+            <small class="text-muted">Nueva consulta</small>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-lg-3">
+        <a routerLink="/citas" class="card action-card text-decoration-none h-100">
+          <div class="card-body">
+            <span class="action-icon" style="background:rgba(44,111,170,.1);color:#2c6faa"><i class="bi bi-calendar3"></i></span>
+            <strong class="d-block small">Ver agenda</strong>
+            <small class="text-muted">Gestión de citas</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 g-lg-4">
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Citas de hoy</span>
+          <a routerLink="/citas" class="btn btn-sm btn-link text-decoration-none p-0">Ver agenda</a>
+        </div>
+        <div class="card-body p-0">
+          <div *ngIf="citasHoyLista().length > 0; else sinCitasHoy">
+            <div
+              class="mini-cita px-3 py-2 border-bottom"
+              *ngFor="let c of citasHoyLista(); trackBy: trackByCitaId"
+              [appCitaProxima]="c.fecha"
+              [estadoCita]="c.estado"
+            >
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <div class="text-center flex-shrink-0" style="min-width:56px">
+                  <strong class="d-block small">{{ c.hora }}</strong>
+                </div>
+                <div class="flex-grow-1 min-w-0">
+                  <strong class="d-block text-truncate">{{ c.nombreMascota }}</strong>
+                  <small class="text-muted text-truncate d-block">{{ c.motivo }}</small>
+                </div>
+                <span class="badge flex-shrink-0" [appEstadoBadge]="c.estado">{{ c.estado | estadoCita }}</span>
+              </div>
+              <div class="d-flex flex-wrap gap-1 ps-5" *ngIf="c.estado !== 'completada' && c.estado !== 'cancelada'">
+                <button class="btn btn-sm btn-outline-success" (click)="cambiarEstado(c, 'confirmada')" *ngIf="c.estado === 'pendiente'">Confirmar</button>
+                <button class="btn btn-sm btn-primary" (click)="completarCita(c)">Atender / Historial</button>
+                <button class="btn btn-sm btn-outline-danger" (click)="cambiarEstado(c, 'cancelada')">Cancelar</button>
+                <a [routerLink]="['/citas', c.id, 'editar']" class="btn btn-sm btn-outline-secondary">Editar</a>
+              </div>
+            </div>
+          </div>
+          <ng-template #sinCitasHoy>
+            <p class="text-muted text-center py-4 mb-0 small">No hay citas programadas para hoy</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100 mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Próximas citas</span>
+          <a routerLink="/citas" class="btn btn-sm btn-link text-decoration-none p-0">Ver todas</a>
+        </div>
+        <div class="card-body p-0">
+          <div *ngIf="proximasCitas().length > 0; else sinCitas">
+            <div
+              class="mini-cita d-flex align-items-center gap-3 px-3 py-2 border-bottom"
+              *ngFor="let c of proximasCitas(); trackBy: trackByCitaId"
+              [appCitaProxima]="c.fecha"
+              [estadoCita]="c.estado"
+            >
+              <div class="text-center flex-shrink-0" style="min-width:72px">
+                <strong class="d-block small">{{ c.fecha | fechaCita }}</strong>
+                <span class="text-muted" style="font-size:0.75rem">{{ c.hora }}</span>
+              </div>
+              <div class="flex-grow-1 min-w-0">
+                <strong class="d-block text-truncate">{{ c.nombreMascota }}</strong>
+                <small class="text-muted text-truncate d-block">{{ c.tipo | titlecase }} · {{ c.veterinario }}</small>
+              </div>
+              <span class="badge flex-shrink-0" [appEstadoBadge]="c.estado">{{ c.estado | estadoCita }}</span>
+            </div>
+          </div>
+          <ng-template #sinCitas>
+            <p class="text-muted text-center py-4 mb-0 small">No hay citas próximas programadas</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Mascotas recientes</span>
+          <a routerLink="/mascotas" class="btn btn-sm btn-link text-decoration-none p-0">Ver todas</a>
+        </div>
+        <div class="card-body p-0">
+          <div
+            class="d-flex align-items-center gap-3 px-3 py-2 border-bottom"
+            *ngFor="let m of ultimasMascotas(); trackBy: trackByMascotaId"
+          >
+            <span class="species-avatar"><i class="bi {{ m.especie | especie: 'icono' }}"></i></span>
+            <div class="flex-grow-1 min-w-0">
+              <strong class="d-block text-truncate">{{ m.nombre }}</strong>
+              <small class="text-muted text-truncate d-block">{{ m.raza }} · {{ m.dueno.nombre }}</small>
+            </div>
+            <a [routerLink]="['/mascotas', m.id]" class="btn btn-sm btn-outline-primary flex-shrink-0">Ver</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

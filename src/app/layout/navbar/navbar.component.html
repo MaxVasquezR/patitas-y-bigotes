@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+  <div class="container-fluid px-3 px-lg-4">
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/dashboard" (click)="cerrarMenu()">
+      <i class="bi bi-heart-pulse-fill fs-4"></i>
+      <div class="brand-text">
+        <span class="brand-name">{{ clinicaNombre }}</span>
+        <small class="brand-tagline d-none d-sm-block">{{ clinicaTagline }}</small>
+      </div>
+    </a>
+
+    <button
+      class="navbar-toggler border-0"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuAbierto()"
+      aria-label="Alternar menú"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" [class.show]="menuAbierto()">
+      <ul class="navbar-nav ms-auto gap-lg-1">
+        <li class="nav-item">
+          <a
+            class="nav-link d-flex align-items-center gap-2"
+            routerLink="/dashboard"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="cerrarMenu()"
+          >
+            <i class="bi bi-house-door"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link d-flex align-items-center gap-2"
+            routerLink="/mascotas"
+            routerLinkActive="active"
+            (click)="cerrarMenu()"
+          >
+            <i class="bi bi-emoji-smile"></i>
+            <span>Mascotas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link d-flex align-items-center gap-2"
+            routerLink="/propietarios"
+            routerLinkActive="active"
+            (click)="cerrarMenu()"
+          >
+            <i class="bi bi-people"></i>
+            <span>Propietarios</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link d-flex align-items-center gap-2"
+            routerLink="/citas"
+            routerLinkActive="active"
+            (click)="cerrarMenu()"
+          >
+            <i class="bi bi-calendar-check"></i>
+            <span>Citas</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

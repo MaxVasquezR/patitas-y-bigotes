@@ -1,0 +1,41 @@
+<div class="page-shell">
+  <app-page-header
+    titulo="Administración de datos"
+    subtitulo="Respaldo, importación y restauración (solo administrador)"
+    icono="bi-database"
+    accionTexto="Volver"
+    accionLink="/dashboard"
+    accionIcono="bi-arrow-left"
+    accionVariant="outline"
+  ></app-page-header>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h6 fw-semibold"><i class="bi bi-download me-2 text-primary"></i>Exportar backup</h2>
+          <p class="small text-muted">Descarga un archivo JSON con mascotas, propietarios, citas e historial.</p>
+          <button type="button" class="btn btn-primary btn-sm" (click)="exportar()">Descargar JSON</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h6 fw-semibold"><i class="bi bi-upload me-2 text-primary"></i>Importar backup</h2>
+          <p class="small text-muted">Restaura datos desde un archivo exportado previamente.</p>
+          <input type="file" class="form-control form-control-sm" accept=".json" (change)="onImportar($event)" />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-warning">
+        <div class="card-body">
+          <h2 class="h6 fw-semibold text-warning"><i class="bi bi-arrow-counterclockwise me-2"></i>Restaurar demo</h2>
+          <p class="small text-muted">Vuelve a los datos iniciales de Patitas y Bigotes para una nueva demostración.</p>
+          <button type="button" class="btn btn-outline-warning btn-sm" (click)="restaurarDemo()">Restaurar datos demo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

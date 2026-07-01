@@ -1,0 +1,89 @@
+<div class="page-shell" *ngIf="!noEncontrada; else noExiste">
+  <app-page-header
+    titulo="Editar mascota"
+    subtitulo="Actualizar datos del paciente y propietario"
+    icono="bi-pencil"
+    accionTexto="Volver"
+    [accionLink]="['/mascotas', mascotaId]"
+    accionIcono="bi-arrow-left"
+    accionVariant="outline"
+  ></app-page-header>
+
+  <form [formGroup]="form" class="card border-0 shadow-sm" (ngSubmit)="guardar()">
+    <div class="card-body p-4">
+      <h2 class="h6 fw-semibold mb-3 text-muted text-uppercase small">Paciente</h2>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label">Nombre *</label>
+          <input class="form-control" formControlName="nombre" [class.is-invalid]="isInvalid('nombre')" />
+          <div class="invalid-feedback d-block">{{ errorMsg('nombre') }}</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Especie *</label>
+          <select class="form-select" formControlName="especie" [class.is-invalid]="isInvalid('especie')">
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let e of especies" [value]="e">{{ e | titlecase }}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Raza *</label>
+          <input class="form-control" formControlName="raza" [class.is-invalid]="isInvalid('raza')" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Fecha nacimiento *</label>
+          <input type="date" class="form-control" formControlName="fechaNacimiento" [class.is-invalid]="isInvalid('fechaNacimiento')" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Sexo *</label>
+          <select class="form-select" formControlName="sexo" [class.is-invalid]="isInvalid('sexo')">
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let s of sexos" [value]="s">{{ s | titlecase }}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Peso (kg) *</label>
+          <input type="number" step="0.1" class="form-control" formControlName="peso" [class.is-invalid]="isInvalid('peso')" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Color *</label>
+          <input class="form-control" formControlName="color" [class.is-invalid]="isInvalid('color')" />
+        </div>
+      </div>
+
+      <h2 class="h6 fw-semibold mb-3 text-muted text-uppercase small">Propietario</h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre *</label>
+          <input class="form-control" formControlName="dueno_nombre" [class.is-invalid]="isInvalid('dueno_nombre')" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Apellido *</label>
+          <input class="form-control" formControlName="dueno_apellido" [class.is-invalid]="isInvalid('dueno_apellido')" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Teléfono *</label>
+          <input class="form-control" formControlName="dueno_telefono" [class.is-invalid]="isInvalid('dueno_telefono')" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-control" formControlName="dueno_email" [class.is-invalid]="isInvalid('dueno_email')" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Dirección *</label>
+          <input class="form-control" formControlName="dueno_direccion" [class.is-invalid]="isInvalid('dueno_direccion')" />
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      <a [routerLink]="['/mascotas', mascotaId]" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<ng-template #noExiste>
+  <div class="page-shell text-center py-5">
+    <p class="text-muted">Mascota no encontrada</p>
+    <a routerLink="/mascotas" class="btn btn-primary btn-sm">Volver</a>
+  </div>
+</ng-template>

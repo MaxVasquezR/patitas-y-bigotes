@@ -1,0 +1,94 @@
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  background: #0f1f2e;
+}
+
+@media (min-width: 992px) {
+  .login-page {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.login-hero {
+  display: none;
+  padding: 3rem;
+  color: #fff;
+  background: linear-gradient(160deg, #0f1f2e 0%, #1a5276 55%, #154360 100%);
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 992px) {
+  .login-hero {
+    display: flex;
+  }
+}
+
+.login-hero h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.login-hero-features {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+    opacity: 0.92;
+    font-size: 0.95rem;
+    .bi { color: #3d8bfd; font-size: 1.1rem; }
+  }
+}
+
+.login-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: #eef1f5;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border: none;
+  border-radius: 12px;
+}
+
+.login-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background: rgba(26, 82, 118, 0.1);
+  color: #1a5276;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.login-clinic-info {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.login-demo ul {
+  line-height: 1.7;
+}
+
+.login-role-hint {
+  font-size: 0.72rem;
+  padding: 0.5rem 0.65rem;
+  background: #f8f9fa;
+  border-radius: 0.375rem;
+  margin-top: 0.5rem;
+}

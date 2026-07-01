@@ -1,0 +1,170 @@
+<div class="page-shell" *ngIf="mascota() as mascota; else noEncontrada">
+  <app-page-header
+    [titulo]="mascota.nombre"
+    [subtitulo]="mascota.raza + ' · ' + (mascota.especie | especie: 'label')"
+    icono="bi-heart-pulse"
+    accionTexto="Volver"
+    accionLink="/mascotas"
+    accionIcono="bi-arrow-left"
+    accionVariant="outline"
+  ></app-page-header>
+
+  <div class="d-flex flex-wrap gap-2 mb-3">
+    <a [routerLink]="['/mascotas', mascota.id, 'editar']" class="btn btn-primary btn-sm">
+      <i class="bi bi-pencil me-1"></i>Editar
+    </a>
+    <a [routerLink]="['/historial', mascota.id]" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-journal-medical me-1"></i>Historial completo
+    </a>
+    <a [routerLink]="['/citas/nueva']" [queryParams]="{ mascotaId: mascota.id }" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-calendar-plus me-1"></i>Agendar cita
+    </a>
+  </div>
+
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="tabActiva() === 'resumen'" (click)="cambiarTab('resumen')">Resumen</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="tabActiva() === 'citas'" (click)="cambiarTab('citas')">
+        Citas <span class="badge bg-secondary ms-1">{{ citas().length }}</span>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="tabActiva() === 'historial'" (click)="cambiarTab('historial')">
+        Historial <span class="badge bg-secondary ms-1">{{ historial().length }}</span>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="tabActiva() === 'peso'" (click)="cambiarTab('peso')">Evolución peso</button>
+    </li>
+  </ul>
+
+  <!-- Resumen -->
+  <div *ngIf="tabActiva() === 'resumen'">
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header">Datos del paciente</div>
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <span class="species-avatar species-avatar-lg">
+                <i class="bi {{ mascota.especie | especie: 'icono' }}"></i>
+              </span>
+              <div>
+                <span class="badge bg-light text-dark border">{{ mascota.especie | especie: 'label' }}</span>
+                <p class="text-muted small mb-0 mt-1">{{ mascota.sexo | titlecase }}</p>
+              </div>
+            </div>
+            <table class="table table-sm table-borderless mb-0">
+              <tr><td class="text-muted">Edad</td><td>{{ mascota.fechaNacimiento | edad }}</td></tr>
+              <tr><td class="text-muted">Peso</td><td>{{ mascota.peso }} kg</td></tr>
+              <tr><td class="text-muted">Estado</td><td><span class="badge bg-light text-dark border">{{ mascota.estado }}</span></td></tr>
+              <tr *ngIf="mascota.microchip"><td class="text-muted">Microchip</td><td>{{ mascota.microchip }}</td></tr>
+              <tr *ngIf="mascota.alergias"><td class="text-muted">Alergias</td><td>{{ mascota.alergias }}</td></tr>
+              <tr><td class="text-muted">Color</td><td>{{ mascota.color }}</td></tr>
+              <tr><td class="text-muted">Registro</td><td>{{ mascota.fechaRegistro }}</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header">Propietario</div>
+          <div class="card-body">
+            <table class="table table-sm table-borderless mb-0">
+              <tr><td class="text-muted">Nombre</td><td>{{ mascota.dueno.nombre }} {{ mascota.dueno.apellido }}</td></tr>
+              <tr><td class="text-muted">Teléfono</td><td>{{ mascota.dueno.telefono | telefono }}</td></tr>
+              <tr><td class="text-muted">Email</td><td>{{ mascota.dueno.email }}</td></tr>
+              <tr><td class="text-muted">Dirección</td><td>{{ mascota.dueno.direccion }}</td></tr>
+            </table>
+            <a [routerLink]="['/propietarios', mascota.dueno.id]" class="btn btn-sm btn-link p-0 mt-2">Ver ficha del propietario</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Citas -->
+  <div *ngIf="tabActiva() === 'citas'">
+    <div class="card" *ngIf="citas().length; else sinCitas">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm mb-0 align-middle">
+          <thead class="table-light">
+            <tr><th>Fecha</th><th>Hora</th><th>Tipo</th><th>Motivo</th><th>Estado</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of citas(); trackBy: trackByCitaId">
+              <td>{{ c.fecha }}</td>
+              <td>{{ c.hora }}</td>
+              <td>{{ c.tipo | titlecase }}</td>
+              <td class="text-truncate" style="max-width:200px">{{ c.motivo }}</td>
+              <td><span class="badge" [appEstadoBadge]="c.estado">{{ c.estado | estadoCita }}</span></td>
+              <td class="text-end">
+                <a [routerLink]="['/citas', c.id, 'editar']" class="btn btn-sm btn-outline-secondary">Editar</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <ng-template #sinCitas>
+      <p class="text-muted text-center py-4">Sin citas registradas</p>
+    </ng-template>
+  </div>
+
+  <!-- Historial resumen -->
+  <div *ngIf="tabActiva() === 'historial'">
+    <div *ngIf="historial().length; else sinHistorial">
+      <div class="card mb-2" *ngFor="let r of historial().slice(0, 5); trackBy: trackByRegistroId">
+        <div class="card-body py-3">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <div>
+              <strong>{{ r.fecha }}</strong> — {{ r.motivoConsulta }}
+              <p class="small text-muted mb-0">{{ r.diagnostico }}</p>
+            </div>
+            <span class="badge bg-light text-dark border">{{ r.peso }} kg</span>
+          </div>
+        </div>
+      </div>
+      <a [routerLink]="['/historial', mascota.id]" class="btn btn-sm btn-outline-primary">Ver historial completo</a>
+    </div>
+    <ng-template #sinHistorial>
+      <p class="text-muted text-center py-4">Sin registros clínicos</p>
+    </ng-template>
+  </div>
+
+  <!-- Evolución peso -->
+  <div *ngIf="tabActiva() === 'peso'">
+    <div class="card" *ngIf="evolucionPeso().length; else sinPeso">
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead class="table-light"><tr><th>Fecha consulta</th><th>Peso (kg)</th><th>Variación</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let p of evolucionPeso(); let i = index; trackBy: trackByPeso">
+              <td>{{ p.fecha }}</td>
+              <td><strong>{{ p.peso }}</strong></td>
+              <td>
+                <span *ngIf="i > 0" [class.text-success]="p.peso < evolucionPeso()[i-1].peso"
+                      [class.text-danger]="p.peso > evolucionPeso()[i-1].peso">
+                  {{ p.peso - evolucionPeso()[i-1].peso > 0 ? '+' : '' }}{{ (p.peso - evolucionPeso()[i-1].peso) | number:'1.1-1' }} kg
+                </span>
+                <span *ngIf="i === 0" class="text-muted">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <ng-template #sinPeso>
+      <p class="text-muted text-center py-4">Registre consultas para ver la evolución del peso</p>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #noEncontrada>
+  <div class="page-shell text-center py-5">
+    <p class="text-muted mb-3">Mascota no encontrada</p>
+    <a routerLink="/mascotas" class="btn btn-primary btn-sm">Volver al listado</a>
+  </div>
+</ng-template>

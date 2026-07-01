@@ -1,0 +1,7 @@
+.mascota-card {
+  transition: box-shadow 0.15s ease;
+}
+
+.mascota-card:hover {
+  box-shadow: 0 2px 10px rgba(15, 31, 46, 0.1);
+}

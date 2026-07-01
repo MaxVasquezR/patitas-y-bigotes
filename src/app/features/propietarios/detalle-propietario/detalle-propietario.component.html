@@ -1,0 +1,86 @@
+<div class="page-shell" *ngIf="propietario() as p; else noEncontrado">
+  <app-page-header
+    [titulo]="(p.nombre | capitalize) + ' ' + (p.apellido | capitalize)"
+    subtitulo="Ficha del propietario"
+    icono="bi-person"
+    accionTexto="Volver"
+    accionLink="/propietarios"
+    accionIcono="bi-arrow-left"
+    accionVariant="outline"
+  ></app-page-header>
+
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <a [routerLink]="['/propietarios', p.id, 'editar']" class="btn btn-primary btn-sm">
+      <i class="bi bi-pencil me-1"></i>Editar
+    </a>
+    <button *appSiPermiso="'eliminar'" class="btn btn-outline-danger btn-sm" (click)="eliminar()">
+      <i class="bi bi-trash me-1"></i>Eliminar
+    </button>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-lg-5">
+      <div class="card h-100">
+        <div class="card-header">Contacto</div>
+        <div class="card-body">
+          <table class="table table-sm table-borderless mb-0">
+            <tr><td class="text-muted">Documento</td><td>{{ p.tipoDocumento }} {{ p.numeroDocumento }}</td></tr>
+            <tr><td class="text-muted">Teléfono</td><td>{{ p.telefono | telefono }}</td></tr>
+            <tr><td class="text-muted">Email</td><td>{{ p.email }}</td></tr>
+            <tr><td class="text-muted">Dirección</td><td>{{ p.direccion }}, {{ p.distrito }}</td></tr>
+            <tr *ngIf="p.contactoEmergencia"><td class="text-muted">Emergencia</td><td>{{ p.contactoEmergencia }}</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-7">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between">
+          <span>Mascotas ({{ mascotas().length }})</span>
+          <a routerLink="/mascotas/nueva" class="btn btn-sm btn-link p-0">Agregar</a>
+        </div>
+        <div class="card-body p-0" *ngIf="mascotas().length; else sinMascotas">
+          <div class="d-flex align-items-center gap-3 px-3 py-2 border-bottom"
+               *ngFor="let m of mascotas(); trackBy: trackByMascotaId">
+            <span class="species-avatar"><i class="bi {{ m.especie | especie: 'icono' }}"></i></span>
+            <div class="flex-grow-1">
+              <strong>{{ m.nombre }}</strong>
+              <small class="text-muted d-block">{{ m.raza }}</small>
+            </div>
+            <a [routerLink]="['/mascotas', m.id]" class="btn btn-sm btn-outline-primary">Ver ficha</a>
+          </div>
+        </div>
+        <ng-template #sinMascotas>
+          <p class="text-muted text-center py-4 mb-0 small">Sin mascotas registradas</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="citas().length">
+    <div class="card-header">Últimas citas de sus mascotas</div>
+    <div class="table-responsive">
+      <table class="table table-sm mb-0">
+        <thead class="table-light">
+          <tr><th>Mascota</th><th>Fecha</th><th>Hora</th><th>Tipo</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of citas()">
+            <td>{{ c.nombreMascota }}</td>
+            <td>{{ c.fecha }}</td>
+            <td>{{ c.hora }}</td>
+            <td>{{ c.tipo | titlecase }}</td>
+            <td><span class="badge" [appEstadoBadge]="c.estado">{{ c.estado | estadoCita }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #noEncontrado>
+  <div class="page-shell text-center py-5">
+    <p class="text-muted">Propietario no encontrado</p>
+    <a routerLink="/propietarios" class="btn btn-primary btn-sm">Volver</a>
+  </div>
+</ng-template>

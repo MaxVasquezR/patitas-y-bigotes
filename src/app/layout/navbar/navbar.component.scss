@@ -1,0 +1,43 @@
+.brand-text {
+  line-height: 1.15;
+}
+
+.brand-name {
+  display: block;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.brand-tagline {
+  font-size: 0.7rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.nav-link {
+  font-weight: 500;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.85rem !important;
+  transition: background-color 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.nav-link.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .nav-link {
+    padding: 0.65rem 0.5rem !important;
+  }
+}

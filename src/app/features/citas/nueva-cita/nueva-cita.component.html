@@ -1,0 +1,109 @@
+<div class="page-shell">
+  <app-page-header
+    titulo="Agendar nueva cita"
+    subtitulo="Programación de consulta veterinaria"
+    icono="bi-calendar-plus"
+    accionTexto="Volver"
+    accionLink="/citas"
+    accionIcono="bi-arrow-left"
+    accionVariant="outline"
+  ></app-page-header>
+
+  <div *ngIf="guardado" class="alert alert-success d-flex align-items-center gap-2" role="alert">
+    <i class="bi bi-check-circle-fill"></i>
+    ¡Cita agendada exitosamente! Redirigiendo...
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <form [formGroup]="form" class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <label class="form-label">Mascota *</label>
+            <select class="form-select" formControlName="mascotaId"
+              [class.is-invalid]="isInvalid('mascotaId')" [class.is-valid]="isValid('mascotaId')">
+              <option value="">Seleccionar mascota...</option>
+              <option *ngFor="let m of mascotas" [value]="m.id">
+                {{ m.nombre }} ({{ m.especie }}) — {{ m.dueno.nombre }} {{ m.dueno.apellido }}
+              </option>
+            </select>
+            <div class="invalid-feedback d-block">{{ errorMsg('mascotaId') }}</div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Fecha *</label>
+              <input type="date" class="form-control" formControlName="fecha"
+                [class.is-invalid]="isInvalid('fecha')" [class.is-valid]="isValid('fecha')" />
+              <div class="invalid-feedback d-block">{{ errorMsg('fecha') }}</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Hora *</label>
+              <select class="form-select" formControlName="hora"
+                [class.is-invalid]="isInvalid('hora')" [class.is-valid]="isValid('hora')">
+                <option value="">Seleccionar hora...</option>
+                <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+              </select>
+              <div class="invalid-feedback d-block">{{ errorMsg('hora') }}</div>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Tipo de Cita *</label>
+              <select class="form-select" formControlName="tipo"
+                [class.is-invalid]="isInvalid('tipo')" [class.is-valid]="isValid('tipo')">
+                <option value="">Seleccionar tipo...</option>
+                <option *ngFor="let t of tipos" [value]="t">{{ t | titlecase }}</option>
+              </select>
+              <div class="invalid-feedback d-block">{{ errorMsg('tipo') }}</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Veterinario *</label>
+              <select class="form-select" formControlName="veterinario"
+                [class.is-invalid]="isInvalid('veterinario')" [class.is-valid]="isValid('veterinario')">
+                <option value="">Seleccionar veterinario...</option>
+                <option *ngFor="let v of veterinarios" [value]="v">{{ v }}</option>
+              </select>
+              <div class="invalid-feedback d-block">{{ errorMsg('veterinario') }}</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Motivo de la Consulta *</label>
+            <textarea class="form-control" formControlName="motivo" rows="3" placeholder="Describe el motivo de la cita..."
+              [class.is-invalid]="isInvalid('motivo')" [class.is-valid]="isValid('motivo')"></textarea>
+            <div class="invalid-feedback d-block">{{ errorMsg('motivo') }}</div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Notas adicionales (opcional)</label>
+            <textarea class="form-control" formControlName="notas" rows="2" placeholder="Indicaciones especiales, ayuno, etc."></textarea>
+          </div>
+
+          <button type="button" class="btn btn-primary" (click)="guardar()">
+            <i class="bi bi-calendar-check me-1"></i>Agendar Cita
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-lg-5" *ngIf="mascotaSeleccionada as m">
+      <div class="card border-0 shadow-sm bg-primary-subtle">
+        <div class="card-body">
+          <h3 class="h6 fw-semibold mb-3">
+            <i class="bi bi-eye me-2"></i>Vista Previa
+          </h3>
+          <table class="table table-sm table-borderless mb-0">
+            <tbody>
+              <tr><td class="text-muted">Mascota</td><td class="fw-semibold">{{ m.nombre }}</td></tr>
+              <tr><td class="text-muted">Especie</td><td class="fw-semibold">{{ m.especie | titlecase }}</td></tr>
+              <tr><td class="text-muted">Dueño</td><td class="fw-semibold">{{ m.dueno.nombre }} {{ m.dueno.apellido }}</td></tr>
+              <tr><td class="text-muted">Teléfono</td><td class="fw-semibold">{{ m.dueno.telefono | telefono }}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
