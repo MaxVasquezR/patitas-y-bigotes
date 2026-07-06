@@ -54,7 +54,7 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     castrado: true,
     estado: 'activo',
     fechaRegistro: '2023-01-10',
-    dueno: DUENOS_INICIALES[0]
+    duenoId: DUENOS_INICIALES[0].id
   },
   {
     id: '2',
@@ -69,7 +69,7 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     estado: 'activo',
     alergias: 'Polen (leve)',
     fechaRegistro: '2023-02-14',
-    dueno: DUENOS_INICIALES[1]
+    duenoId: DUENOS_INICIALES[1].id
   },
   {
     id: '3',
@@ -84,7 +84,7 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     estado: 'en_tratamiento',
     observaciones: 'Control post-operatorio programado',
     fechaRegistro: '2022-06-01',
-    dueno: DUENOS_INICIALES[2]
+    duenoId: DUENOS_INICIALES[2].id
   },
   {
     id: '4',
@@ -99,7 +99,7 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     castrado: false,
     estado: 'activo',
     fechaRegistro: '2024-03-01',
-    dueno: DUENOS_INICIALES[0]
+    duenoId: DUENOS_INICIALES[0].id
   }
 ];
 

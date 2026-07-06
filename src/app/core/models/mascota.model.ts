@@ -29,7 +29,7 @@ export interface Mascota {
   castrado?: boolean;
   estado: EstadoMascota;
   observaciones?: string;
-  dueno: Dueno;
+  duenoId: string;
   foto?: string;
   fechaRegistro: string;
 }

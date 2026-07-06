@@ -4,12 +4,14 @@ import { DuenoService } from './dueno.service';
 
 describe('MascotaService', () => {
   let service: MascotaService;
+  let duenoService: DuenoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [MascotaService, DuenoService]
     });
     service = TestBed.inject(MascotaService);
+    duenoService = TestBed.inject(DuenoService);
   });
 
   it('debe crear el servicio', () => {
@@ -22,6 +24,19 @@ describe('MascotaService', () => {
 
   it('debe agregar y eliminar mascota', () => {
     const inicial = service.getMascotas().length;
+    const resultadoDueno = duenoService.addDueno({
+      nombre: 'Test',
+      apellido: 'User',
+      numeroDocumento: '88776655',
+      telefono: '999999999',
+      email: 'test@test.com',
+      direccion: 'Test 123',
+      distrito: 'Lima',
+      aceptaDatos: true
+    });
+    expect(resultadoDueno.ok).toBe(true);
+    if (!resultadoDueno.ok) return;
+
     const nueva = service.addMascota({
       nombre: 'Test',
       especie: 'perro',
@@ -31,17 +46,7 @@ describe('MascotaService', () => {
       peso: 10,
       color: 'Negro',
       estado: 'activo',
-      dueno: {
-        id: 'dx',
-        nombre: 'Test',
-        apellido: 'User',
-        numeroDocumento: '88776655',
-        telefono: '999999999',
-        email: 'test@test.com',
-        direccion: 'Test 123',
-        distrito: 'Lima',
-        aceptaDatos: true
-      }
+      duenoId: resultadoDueno.dueno.id
     });
     expect(service.getMascotas().length).toBe(inicial + 1);
     service.deleteMascota(nueva.id);

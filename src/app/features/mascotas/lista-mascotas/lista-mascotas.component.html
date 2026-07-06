@@ -35,13 +35,13 @@
           </div>
           <dl class="row small mb-0 g-1">
             <dt class="col-5 text-muted fw-normal">Propietario</dt>
-            <dd class="col-7 mb-1">{{ m.dueno.nombre }} {{ m.dueno.apellido }}</dd>
+            <dd class="col-7 mb-1">{{ dueno(m.duenoId)?.nombre }} {{ dueno(m.duenoId)?.apellido }}</dd>
             <dt class="col-5 text-muted fw-normal">Edad</dt>
             <dd class="col-7 mb-1">{{ m.fechaNacimiento | edad }}</dd>
             <dt class="col-5 text-muted fw-normal">Peso</dt>
             <dd class="col-7 mb-1">{{ m.peso }} kg</dd>
             <dt class="col-5 text-muted fw-normal">Teléfono</dt>
-            <dd class="col-7 mb-0">{{ m.dueno.telefono | telefono }}</dd>
+            <dd class="col-7 mb-0">{{ (dueno(m.duenoId)?.telefono ?? '') | telefono }}</dd>
           </dl>
         </div>
         <div class="card-footer bg-white d-flex flex-wrap gap-2">

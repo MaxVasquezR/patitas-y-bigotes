@@ -17,7 +17,7 @@
           <select class="form-select" formControlName="mascotaId" [class.is-invalid]="isInvalid('mascotaId')">
             <option value="">Seleccionar...</option>
             <option *ngFor="let m of mascotas" [value]="m.id">
-              {{ m.nombre }} — {{ m.dueno.nombre }} {{ m.dueno.apellido }}
+              {{ m.nombre }} — {{ nombreDueno(m) }}
             </option>
           </select>
         </div>

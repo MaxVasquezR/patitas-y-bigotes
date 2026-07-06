@@ -15,7 +15,7 @@ export function normalizarDueno(d: Partial<Dueno> & { id: string }): Dueno {
   };
 }
 
-export function normalizarMascota(m: Partial<Mascota> & { id: string; dueno: Partial<Dueno> & { id: string } }): Mascota {
+export function normalizarMascota(m: Partial<Mascota> & { id: string; duenoId: string }): Mascota {
   return {
     id: m.id,
     nombre: m.nombre ?? '',
@@ -31,7 +31,7 @@ export function normalizarMascota(m: Partial<Mascota> & { id: string; dueno: Par
     castrado: m.castrado ?? false,
     estado: m.estado ?? 'activo',
     observaciones: m.observaciones,
-    dueno: normalizarDueno(m.dueno),
+    duenoId: m.duenoId,
     foto: m.foto,
     fechaRegistro: m.fechaRegistro ?? new Date().toISOString().split('T')[0]
   };

@@ -21,9 +21,9 @@
             <p class="text-muted small mb-1">
               {{ mascota.raza }} · {{ mascota.sexo | titlecase }} · {{ mascota.fechaNacimiento | edad }}
             </p>
-            <p class="text-muted small mb-0">
-              Propietario: {{ mascota.dueno.nombre }} {{ mascota.dueno.apellido }}
-              · {{ mascota.dueno.telefono | telefono }}
+            <p class="text-muted small mb-0" *ngIf="dueno() as propietario">
+              Propietario: {{ propietario.nombre }} {{ propietario.apellido }}
+              · {{ propietario.telefono | telefono }}
             </p>
           </div>
         </div>

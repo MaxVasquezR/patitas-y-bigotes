@@ -149,7 +149,7 @@ export class RegistroMascotaComponent implements OnInit {
       return;
     }
     const v = this.form.value;
-    let dueno: Dueno;
+    let duenoId: string;
 
     if (this.modoDueno() === 'existente') {
       const existente = this.duenoService.getDuenoById(v.dueno_id);
@@ -157,7 +157,7 @@ export class RegistroMascotaComponent implements OnInit {
         this.toastService.warning('Seleccione un propietario válido');
         return;
       }
-      dueno = existente;
+      duenoId = existente.id;
     } else {
       const dup = this.duenoService.existeDuplicado({
         numeroDocumento: v.dueno_numeroDocumento,
@@ -181,7 +181,7 @@ export class RegistroMascotaComponent implements OnInit {
         this.toastService.warning(creado.error);
         return;
       }
-      dueno = creado.dueno;
+      duenoId = creado.dueno.id;
     }
 
     const mascota = this.mascotaService.addMascota({
@@ -198,7 +198,7 @@ export class RegistroMascotaComponent implements OnInit {
       castrado: !!v.castrado,
       estado: v.estado,
       observaciones: v.observaciones || undefined,
-      dueno
+      duenoId
     });
 
     const s = this.auth.getSesionActual();

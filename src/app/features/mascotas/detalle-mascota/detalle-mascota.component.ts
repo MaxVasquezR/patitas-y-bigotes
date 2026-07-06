@@ -2,6 +2,7 @@ import { Component, OnInit, computed, signal, ChangeDetectionStrategy } from '@a
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MascotaService } from '../../../core/services/mascota.service';
+import { DuenoService } from '../../../core/services/dueno.service';
 import { CitaService } from '../../../core/services/cita.service';
 import { HistorialService } from '../../../core/services/historial.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -31,6 +32,11 @@ export class DetalleMascotaComponent implements OnInit {
 
   readonly mascota = computed(() => this.mascotaService.getMascotaById(this.mascotaId()));
 
+  readonly dueno = computed(() => {
+    const m = this.mascota();
+    return m ? this.duenoService.getDuenoById(m.duenoId) : undefined;
+  });
+
   readonly citas = computed(() => {
     this.citaService.citas();
     const id = this.mascotaId();
@@ -55,6 +61,7 @@ export class DetalleMascotaComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private mascotaService: MascotaService,
+    private duenoService: DuenoService,
     private citaService: CitaService,
     private historialService: HistorialService,
     private auth: AuthService

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MascotaService } from '../../../core/services/mascota.service';
+import { DuenoService } from '../../../core/services/dueno.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -31,6 +32,7 @@ export class EditarMascotaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private mascotaService: MascotaService,
+    private duenoService: DuenoService,
     private auth: AuthService,
     private audit: AuditService,
     private toast: ToastService
@@ -70,6 +72,7 @@ export class EditarMascotaComponent implements OnInit {
       this.noEncontrada = true;
       return;
     }
+    const dueno = this.duenoService.getDuenoById(m.duenoId);
     this.form.patchValue({
       nombre: m.nombre,
       especie: m.especie,
@@ -79,11 +82,11 @@ export class EditarMascotaComponent implements OnInit {
       sexo: m.sexo,
       peso: m.peso,
       color: m.color,
-      dueno_nombre: m.dueno.nombre,
-      dueno_apellido: m.dueno.apellido,
-      dueno_telefono: m.dueno.telefono,
-      dueno_email: m.dueno.email,
-      dueno_direccion: m.dueno.direccion
+      dueno_nombre: dueno?.nombre,
+      dueno_apellido: dueno?.apellido,
+      dueno_telefono: dueno?.telefono,
+      dueno_email: dueno?.email,
+      dueno_direccion: dueno?.direccion
     });
   }
 
@@ -104,15 +107,15 @@ export class EditarMascotaComponent implements OnInit {
       fechaNacimiento: v.fechaNacimiento,
       sexo: v.sexo,
       peso: +v.peso,
-      color: v.color,
-      dueno: {
-        ...actual.dueno,
-        nombre: v.dueno_nombre,
-        apellido: v.dueno_apellido,
-        telefono: v.dueno_telefono,
-        email: v.dueno_email,
-        direccion: v.dueno_direccion
-      }
+      color: v.color
+    });
+
+    this.duenoService.updateDueno(actual.duenoId, {
+      nombre: v.dueno_nombre,
+      apellido: v.dueno_apellido,
+      telefono: v.dueno_telefono,
+      email: v.dueno_email,
+      direccion: v.dueno_direccion
     });
 
     const s = this.auth.getSesionActual();

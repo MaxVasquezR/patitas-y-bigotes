@@ -1,9 +1,9 @@
 import { Injectable, signal } from '@angular/core';
-import { Mascota, Dueno } from '../models/mascota.model';
+import { Mascota } from '../models/mascota.model';
 import { MASCOTAS_INICIALES } from '../constants/seed.data';
 import { DuenoService } from './dueno.service';
 import { StorageService } from './storage.service';
-import { normalizarMascota, normalizarDueno } from '../utils/entity-normalizers';
+import { normalizarMascota } from '../utils/entity-normalizers';
 
 const STORAGE_KEY = 'pb_mascotas';
 
@@ -32,11 +32,13 @@ export class MascotaService {
   }
 
   getMascotasByDueno(duenoId: string): Mascota[] {
-    return this._mascotas().filter(m => m.dueno.id === duenoId);
+    return this._mascotas().filter(m => m.duenoId === duenoId);
   }
 
   addMascota(mascota: Omit<Mascota, 'id' | 'fechaRegistro'>): Mascota {
-    this.duenoService.upsertDueno(mascota.dueno);
+    if (!this.duenoService.getDuenoById(mascota.duenoId)) {
+      throw new Error('No se puede registrar una mascota sin un propietario válido');
+    }
     const nueva: Mascota = normalizarMascota({
       ...mascota,
       id: Date.now().toString(),
@@ -48,20 +50,8 @@ export class MascotaService {
   }
 
   updateMascota(id: string, datos: Partial<Mascota>): void {
-    if (datos.dueno) {
-      this.duenoService.upsertDueno(datos.dueno);
-      this.syncDuenoEnMascotas(datos.dueno);
-    }
     this._mascotas.update(list =>
       list.map(m => m.id === id ? normalizarMascota({ ...m, ...datos }) : m)
-    );
-    this.persist();
-  }
-
-  /** Propaga cambios del propietario a todas sus mascotas */
-  syncDuenoEnMascotas(dueno: Dueno): void {
-    this._mascotas.update(list =>
-      list.map(m => m.dueno.id === dueno.id ? { ...m, dueno: normalizarDueno(dueno) } : m)
     );
     this.persist();
   }
@@ -73,14 +63,17 @@ export class MascotaService {
 
   searchMascotas(query: string): Mascota[] {
     const q = query.toLowerCase();
-    return this._mascotas().filter(m =>
-      m.nombre.toLowerCase().includes(q) ||
-      m.dueno.nombre.toLowerCase().includes(q) ||
-      m.dueno.apellido.toLowerCase().includes(q) ||
-      m.raza.toLowerCase().includes(q) ||
-      (m.microchip?.toLowerCase().includes(q) ?? false) ||
-      m.dueno.numeroDocumento.includes(q)
-    );
+    return this._mascotas().filter(m => {
+      const dueno = this.duenoService.getDuenoById(m.duenoId);
+      return (
+        m.nombre.toLowerCase().includes(q) ||
+        (dueno?.nombre.toLowerCase().includes(q) ?? false) ||
+        (dueno?.apellido.toLowerCase().includes(q) ?? false) ||
+        m.raza.toLowerCase().includes(q) ||
+        (m.microchip?.toLowerCase().includes(q) ?? false) ||
+        (dueno?.numeroDocumento.includes(q) ?? false)
+      );
+    });
   }
 
   countByDueno(duenoId: string): number {

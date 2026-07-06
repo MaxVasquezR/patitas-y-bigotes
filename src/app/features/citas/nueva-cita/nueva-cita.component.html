@@ -24,7 +24,7 @@
               [class.is-invalid]="isInvalid('mascotaId')" [class.is-valid]="isValid('mascotaId')">
               <option value="">Seleccionar mascota...</option>
               <option *ngFor="let m of mascotas" [value]="m.id">
-                {{ m.nombre }} ({{ m.especie }}) — {{ m.dueno.nombre }} {{ m.dueno.apellido }}
+                {{ m.nombre }} ({{ m.especie }}) — {{ nombreDueno(m) }}
               </option>
             </select>
             <div class="invalid-feedback d-block">{{ errorMsg('mascotaId') }}</div>
@@ -98,8 +98,8 @@
             <tbody>
               <tr><td class="text-muted">Mascota</td><td class="fw-semibold">{{ m.nombre }}</td></tr>
               <tr><td class="text-muted">Especie</td><td class="fw-semibold">{{ m.especie | titlecase }}</td></tr>
-              <tr><td class="text-muted">Dueño</td><td class="fw-semibold">{{ m.dueno.nombre }} {{ m.dueno.apellido }}</td></tr>
-              <tr><td class="text-muted">Teléfono</td><td class="fw-semibold">{{ m.dueno.telefono | telefono }}</td></tr>
+              <tr><td class="text-muted">Dueño</td><td class="fw-semibold">{{ nombreDueno(m) }}</td></tr>
+              <tr><td class="text-muted">Teléfono</td><td class="fw-semibold">{{ telefonoDueno(m) | telefono }}</td></tr>
             </tbody>
           </table>
         </div>

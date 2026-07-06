@@ -44,6 +44,11 @@ export class DashboardComponent implements OnDestroy {
   readonly ultimasMascotas = computed(() => [...this.mascotaService.mascotas()].slice(-3).reverse());
   readonly nombreUsuario = computed(() => this.auth.nombreUsuario());
 
+  nombreDueno(duenoId: string): string {
+    const d = this.duenoService.getDuenoById(duenoId);
+    return d ? `${d.nombre} ${d.apellido}` : '';
+  }
+
   constructor(
     private mascotaService: MascotaService,
     private citaService: CitaService,

@@ -28,11 +28,12 @@ export class BusquedaService {
     const resultados: ResultadoBusqueda[] = [];
 
     for (const m of this.mascotaService.searchMascotas(q)) {
+      const dueno = this.duenoService.getDuenoById(m.duenoId);
       resultados.push({
         tipo: 'mascota',
         id: m.id,
         titulo: m.nombre,
-        subtitulo: `${m.raza} · ${m.dueno.nombre} ${m.dueno.apellido}`,
+        subtitulo: `${m.raza} · ${dueno?.nombre ?? ''} ${dueno?.apellido ?? ''}`,
         ruta: `/mascotas/${m.id}`
       });
     }

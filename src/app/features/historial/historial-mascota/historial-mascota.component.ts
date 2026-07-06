@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HistorialService } from '../../../core/services/historial.service';
 import { MascotaService } from '../../../core/services/mascota.service';
+import { DuenoService } from '../../../core/services/dueno.service';
 import { CitaService } from '../../../core/services/cita.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
@@ -44,6 +45,10 @@ export class HistorialMascotaComponent implements OnInit {
   form: FormGroup;
 
   readonly mascota = computed(() => this.mascotaService.getMascotaById(this.mascotaId()));
+  readonly dueno = computed(() => {
+    const m = this.mascota();
+    return m ? this.duenoService.getDuenoById(m.duenoId) : undefined;
+  });
   readonly puedeEliminar = computed(() => this.auth.puedeEliminar());
 
   readonly historial = computed(() => {
@@ -63,6 +68,7 @@ export class HistorialMascotaComponent implements OnInit {
     private fb: FormBuilder,
     private historialService: HistorialService,
     private mascotaService: MascotaService,
+    private duenoService: DuenoService,
     private citaService: CitaService,
     private auth: AuthService,
     private audit: AuditService,
