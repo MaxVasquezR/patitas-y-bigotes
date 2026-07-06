@@ -96,7 +96,7 @@
                   <strong class="d-block small">{{ c.hora }}</strong>
                 </div>
                 <div class="flex-grow-1 min-w-0">
-                  <strong class="d-block text-truncate">{{ c.nombreMascota }}</strong>
+                  <strong class="d-block text-truncate">{{ nombreMascota(c.mascotaId) }}</strong>
                   <small class="text-muted text-truncate d-block">{{ c.motivo }}</small>
                 </div>
                 <span class="badge flex-shrink-0" [appEstadoBadge]="c.estado">{{ c.estado | estadoCita }}</span>
@@ -135,7 +135,7 @@
                 <span class="text-muted" style="font-size:0.75rem">{{ c.hora }}</span>
               </div>
               <div class="flex-grow-1 min-w-0">
-                <strong class="d-block text-truncate">{{ c.nombreMascota }}</strong>
+                <strong class="d-block text-truncate">{{ nombreMascota(c.mascotaId) }}</strong>
                 <small class="text-muted text-truncate d-block">{{ c.tipo | titlecase }} · {{ c.veterinario }}</small>
               </div>
               <span class="badge flex-shrink-0" [appEstadoBadge]="c.estado">{{ c.estado | estadoCita }}</span>

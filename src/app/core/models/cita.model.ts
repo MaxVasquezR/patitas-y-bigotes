@@ -4,9 +4,6 @@ export type TipoCita = 'consulta' | 'vacuna' | 'cirugia' | 'control' | 'emergenc
 export interface Cita {
   id: string;
   mascotaId: string;
-  nombreMascota: string;
-  nombreDueno: string;
-  telefonoDueno: string;
   fecha: string;
   hora: string;
   tipo: TipoCita;

@@ -49,16 +49,20 @@ export class BusquedaService {
     }
 
     for (const c of this.citaService.getCitas()) {
+      const mascota = this.mascotaService.getMascotaById(c.mascotaId);
+      const dueno = mascota ? this.duenoService.getDuenoById(mascota.duenoId) : undefined;
+      const nombreMascota = mascota?.nombre ?? '';
+      const nombreDueno = dueno ? `${dueno.nombre} ${dueno.apellido}` : '';
       const match =
-        c.nombreMascota.toLowerCase().includes(q) ||
-        c.nombreDueno.toLowerCase().includes(q) ||
+        nombreMascota.toLowerCase().includes(q) ||
+        nombreDueno.toLowerCase().includes(q) ||
         c.motivo.toLowerCase().includes(q) ||
         c.veterinario.toLowerCase().includes(q);
       if (match) {
         resultados.push({
           tipo: 'cita',
           id: c.id,
-          titulo: `${c.nombreMascota} — ${c.fecha}`,
+          titulo: `${nombreMascota} — ${c.fecha}`,
           subtitulo: `${c.hora} · ${c.tipo} · ${c.estado}`,
           ruta: `/citas/${c.id}/editar`
         });

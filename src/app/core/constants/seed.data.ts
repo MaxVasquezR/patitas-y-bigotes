@@ -115,9 +115,6 @@ export const CITAS_INICIALES: Cita[] = [
   {
     id: 'c1',
     mascotaId: '1',
-    nombreMascota: 'Max',
-    nombreDueno: 'Carlos Mendoza',
-    telefonoDueno: '987654321',
     fecha: hoy(),
     hora: '09:00',
     tipo: 'consulta',
@@ -130,9 +127,6 @@ export const CITAS_INICIALES: Cita[] = [
   {
     id: 'c2',
     mascotaId: '2',
-    nombreMascota: 'Luna',
-    nombreDueno: 'María Torres',
-    telefonoDueno: '945678321',
     fecha: hoy(),
     hora: '11:30',
     tipo: 'vacuna',
@@ -144,9 +138,6 @@ export const CITAS_INICIALES: Cita[] = [
   {
     id: 'c3',
     mascotaId: '3',
-    nombreMascota: 'Rocky',
-    nombreDueno: 'Ana García',
-    telefonoDueno: '912345678',
     fecha: manana(),
     hora: '15:00',
     tipo: 'control',

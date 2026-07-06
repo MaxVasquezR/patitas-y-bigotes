@@ -7,7 +7,6 @@ export class CitaEntity {
   get fecha(): string { return this.data.fecha; }
   get hora(): string { return this.data.hora; }
   get estado(): EstadoCita { return this.data.estado; }
-  get nombreMascota(): string { return this.data.nombreMascota; }
 
   puedeConfirmarse(): boolean {
     return this.data.estado === 'pendiente';

@@ -65,7 +65,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let c of citas()">
-            <td>{{ c.nombreMascota }}</td>
+            <td>{{ nombreMascota(c.mascotaId) }}</td>
             <td>{{ c.fecha }}</td>
             <td>{{ c.hora }}</td>
             <td>{{ c.tipo | titlecase }}</td>

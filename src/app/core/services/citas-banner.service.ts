@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CitaService } from './cita.service';
+import { MascotaService } from './mascota.service';
+import { DuenoService } from './dueno.service';
 import { Cita } from '../models/cita.model';
 
 export type UrgenciaCita = 'urgente' | 'hoy' | 'proxima';
 
 export interface CitaBanner {
   cita: Cita;
+  nombreMascota: string;
+  nombreDueno: string;
   urgencia: UrgenciaCita;
   minutosRestantes?: number;
   etiqueta: string;
@@ -13,7 +17,11 @@ export interface CitaBanner {
 
 @Injectable({ providedIn: 'root' })
 export class CitasBannerService {
-  constructor(private citaService: CitaService) {}
+  constructor(
+    private citaService: CitaService,
+    private mascotaService: MascotaService,
+    private duenoService: DuenoService
+  ) {}
 
   getCitasDestacadas(): CitaBanner[] {
     const ahora = new Date();
@@ -27,11 +35,17 @@ export class CitasBannerService {
     for (const cita of citas) {
       const urgencia = this.calcularUrgencia(cita, ahora, hoy);
       if (!urgencia) continue;
+      const mascota = this.mascotaService.getMascotaById(cita.mascotaId);
+      const dueno = mascota ? this.duenoService.getDuenoById(mascota.duenoId) : undefined;
+      const nombreMascota = mascota?.nombre ?? '';
+      const nombreDueno = dueno ? `${dueno.nombre} ${dueno.apellido}` : '';
       resultado.push({
         cita,
+        nombreMascota,
+        nombreDueno,
         urgencia: urgencia.tipo,
         minutosRestantes: urgencia.minutos,
-        etiqueta: this.etiqueta(cita, urgencia.tipo, urgencia.minutos)
+        etiqueta: this.etiqueta(cita, nombreMascota, urgencia.tipo, urgencia.minutos)
       });
       if (resultado.length >= 5) break;
     }
@@ -61,11 +75,11 @@ export class CitasBannerService {
     return null;
   }
 
-  private etiqueta(cita: Cita, tipo: UrgenciaCita, minutos: number): string {
+  private etiqueta(cita: Cita, nombreMascota: string, tipo: UrgenciaCita, minutos: number): string {
     if (tipo === 'urgente') {
-      return minutos <= 0 ? `¡En curso! ${cita.hora} — ${cita.nombreMascota}` : `En ${minutos} min — ${cita.nombreMascota}`;
+      return minutos <= 0 ? `¡En curso! ${cita.hora} — ${nombreMascota}` : `En ${minutos} min — ${nombreMascota}`;
     }
-    if (tipo === 'hoy') return `Hoy ${cita.hora} — ${cita.nombreMascota} (${cita.tipo})`;
-    return `Mañana ${cita.hora} — ${cita.nombreMascota}`;
+    if (tipo === 'hoy') return `Hoy ${cita.hora} — ${nombreMascota} (${cita.tipo})`;
+    return `Mañana ${cita.hora} — ${nombreMascota}`;
   }
 }

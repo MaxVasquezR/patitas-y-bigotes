@@ -54,7 +54,7 @@ export class CitasBannerComponent {
   private cambiarEstado(item: CitaBanner, estado: EstadoCita): void {
     this.citaService.updateEstado(item.cita.id, estado);
     const s = this.auth.getSesionActual();
-    if (s) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${item.cita.nombreMascota} → ${estado}`);
+    if (s) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${item.nombreMascota} → ${estado}`);
     this.toast.success(`Cita ${estado}`);
   }
 

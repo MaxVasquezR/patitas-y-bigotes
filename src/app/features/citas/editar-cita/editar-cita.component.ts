@@ -93,13 +93,8 @@ export class EditarCitaComponent implements OnInit {
       this.toast.warning('Seleccione una mascota válida');
       return;
     }
-    const dueno = this.duenoService.getDuenoById(m.duenoId);
-
     const resultado = this.citaService.updateCita(this.citaId, {
       mascotaId: v.mascotaId,
-      nombreMascota: m.nombre,
-      nombreDueno: dueno ? `${dueno.nombre} ${dueno.apellido}` : '',
-      telefonoDueno: dueno?.telefono ?? '',
       fecha: v.fecha,
       hora: v.hora,
       tipo: v.tipo,

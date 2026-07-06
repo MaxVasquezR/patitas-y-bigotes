@@ -83,9 +83,6 @@ export class NuevaCitaComponent implements OnInit {
     const m = this.mascotaSeleccionada!;
     const resultado = this.citaService.addCita({
       mascotaId: v.mascotaId,
-      nombreMascota: m.nombre,
-      nombreDueno: this.nombreDueno(m),
-      telefonoDueno: this.telefonoDueno(m),
       fecha: v.fecha,
       hora: v.hora,
       tipo: v.tipo,

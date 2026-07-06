@@ -11,7 +11,7 @@
       >
         <div class="citas-banner-text">
           <strong>{{ item.etiqueta }}</strong>
-          <small>{{ item.cita.veterinario }} · {{ item.cita.nombreDueno }}</small>
+          <small>{{ item.cita.veterinario }} · {{ item.nombreDueno }}</small>
         </div>
         <div class="citas-banner-actions" *ngIf="item.cita.estado !== 'completada'">
           <button type="button" class="btn btn-sm btn-light" *ngIf="item.cita.estado === 'pendiente'" (click)="confirmar(item, $event)">Confirmar</button>
