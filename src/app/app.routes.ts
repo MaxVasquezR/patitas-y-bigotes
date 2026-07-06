@@ -97,6 +97,24 @@ export const routes: Routes = [
         canActivate: [roleGuard('admin')],
         loadComponent: () =>
           import('./features/admin/admin-datos/admin-datos.component').then(m => m.AdminDatosComponent)
+      },
+      {
+        path: 'usuarios',
+        canActivate: [roleGuard('admin')],
+        loadComponent: () =>
+          import('./features/admin/usuarios/lista-usuarios/lista-usuarios.component').then(m => m.ListaUsuariosComponent)
+      },
+      {
+        path: 'usuarios/nuevo',
+        canActivate: [roleGuard('admin')],
+        loadComponent: () =>
+          import('./features/admin/usuarios/registro-usuario/registro-usuario.component').then(m => m.RegistroUsuarioComponent)
+      },
+      {
+        path: 'usuarios/:id/editar',
+        canActivate: [roleGuard('admin')],
+        loadComponent: () =>
+          import('./features/admin/usuarios/editar-usuario/editar-usuario.component').then(m => m.EditarUsuarioComponent)
       }
     ]
   },
