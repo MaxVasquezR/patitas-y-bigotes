@@ -23,10 +23,6 @@ export class HistorialService {
     return this._registros();
   }
 
-  getRegistroById(id: string): RegistroHistorial | undefined {
-    return this._registros().find(r => r.id === id);
-  }
-
   getHistorialByMascota(mascotaId: string): RegistroHistorial[] {
     return this._registros()
       .filter(r => r.mascotaId === mascotaId)

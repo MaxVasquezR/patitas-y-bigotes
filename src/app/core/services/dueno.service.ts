@@ -92,18 +92,6 @@ export class DuenoService {
     );
   }
 
-  upsertDueno(dueno: Dueno): Dueno {
-    const existe = this._duenos().find(d => d.id === dueno.id);
-    const normalizado = normalizarDueno(dueno);
-    if (existe) {
-      this.updateDueno(dueno.id, normalizado);
-      return normalizado;
-    }
-    this._duenos.update(list => [...list, normalizado]);
-    this.persist();
-    return normalizado;
-  }
-
   private persist(): void {
     this.storage.set(STORAGE_KEY, this._duenos());
   }
