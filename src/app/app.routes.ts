@@ -82,6 +82,11 @@ export const routes: Routes = [
           import('./features/historial/historial-mascota/historial-mascota.component').then(m => m.HistorialMascotaComponent)
       },
       {
+        path: 'atencion/:citaId',
+        loadComponent: () =>
+          import('./features/atencion/atender-cita/atender-cita.component').then(m => m.AtenderCitaComponent)
+      },
+      {
         path: 'auditoria',
         canActivate: [roleGuard('admin')],
         loadComponent: () =>

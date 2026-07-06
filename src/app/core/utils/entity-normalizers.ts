@@ -49,7 +49,7 @@ export function normalizarHistorial(r: Partial<RegistroHistorial> & { id: string
     tratamiento: r.tratamiento ?? '',
     medicamentos: r.medicamentos ?? [],
     peso: r.peso ?? 0,
-    temperatura: r.temperatura ?? 38.5,
+    temperatura: r.temperatura,
     frecuenciaCardiaca: r.frecuenciaCardiaca,
     frecuenciaRespiratoria: r.frecuenciaRespiratoria,
     mucosas: r.mucosas,

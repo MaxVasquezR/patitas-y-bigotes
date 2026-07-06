@@ -42,9 +42,7 @@ export class CitasBannerComponent {
 
   atender(item: CitaBanner, event: Event): void {
     event.stopPropagation();
-    this.router.navigate(['/historial', item.cita.mascotaId], {
-      queryParams: { citaId: item.cita.id, nuevo: '1' }
-    });
+    this.router.navigate(['/atencion', item.cita.id]);
   }
 
   verAgenda(): void {

@@ -75,9 +75,7 @@ export class DashboardComponent implements OnDestroy {
   }
 
   completarCita(cita: Cita): void {
-    this.router.navigate(['/historial', cita.mascotaId], {
-      queryParams: { citaId: cita.id, nuevo: '1' }
-    });
+    this.router.navigate(['/atencion', cita.id]);
   }
 
   private formatearReloj(): string {

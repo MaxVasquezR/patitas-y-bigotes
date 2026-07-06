@@ -15,7 +15,7 @@ export interface RegistroHistorial {
   tratamiento: string;
   medicamentos: Medicamento[];
   peso: number;
-  temperatura: number;
+  temperatura?: number;
   frecuenciaCardiaca?: number;
   frecuenciaRespiratoria?: number;
   mucosas?: string;

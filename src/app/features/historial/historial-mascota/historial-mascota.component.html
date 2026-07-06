@@ -60,125 +60,7 @@
     </div>
   </div>
 
-  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-    <h2 class="h5 fw-semibold mb-0">Registros clínicos</h2>
-    <button type="button" class="btn btn-primary btn-sm" (click)="abrirFormulario()" *ngIf="!mostrarFormulario()">
-      <i class="bi bi-plus-lg me-1"></i>Nuevo registro
-    </button>
-  </div>
-
-  <div class="card mb-4" *ngIf="mostrarFormulario()">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <span>{{ tituloFormulario() }}</span>
-      <button type="button" class="btn-close" (click)="cerrarFormulario()" aria-label="Cerrar"></button>
-    </div>
-    <div class="card-body">
-      <app-form-required-legend></app-form-required-legend>
-      <form [formGroup]="form">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label class="form-label">Fecha *</label>
-            <input type="date" class="form-control form-control-sm" formControlName="fecha"
-              [class.is-invalid]="isInvalid('fecha')" />
-            <div class="invalid-feedback d-block">{{ errorMsg('fecha') }}</div>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Veterinario *</label>
-            <select class="form-select form-select-sm" formControlName="veterinario" [class.is-invalid]="isInvalid('veterinario')">
-              <option value="">Seleccionar...</option>
-              <option *ngFor="let v of veterinarios" [value]="v">{{ v }}</option>
-            </select>
-            <div class="invalid-feedback d-block">{{ errorMsg('veterinario') }}</div>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Peso (kg) *</label>
-            <input type="number" step="0.1" class="form-control form-control-sm" formControlName="peso"
-              [class.is-invalid]="isInvalid('peso')" />
-            <div class="invalid-feedback d-block">{{ errorMsg('peso') }}</div>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Motivo de consulta *</label>
-            <input class="form-control form-control-sm" formControlName="motivoConsulta"
-              [class.is-invalid]="isInvalid('motivoConsulta')" />
-            <div class="invalid-feedback d-block">{{ errorMsg('motivoConsulta') }}</div>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Diagnóstico *</label>
-            <input class="form-control form-control-sm" formControlName="diagnostico"
-              [class.is-invalid]="isInvalid('diagnostico')" />
-            <div class="invalid-feedback d-block">{{ errorMsg('diagnostico') }}</div>
-          </div>
-          <div class="col-12">
-            <label class="form-label">Tratamiento *</label>
-            <textarea class="form-control form-control-sm" rows="2" formControlName="tratamiento"
-              [class.is-invalid]="isInvalid('tratamiento')"></textarea>
-            <div class="invalid-feedback d-block">{{ errorMsg('tratamiento') }}</div>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Temperatura (°C) <span class="text-danger">*</span></label>
-            <input type="number" step="0.1" class="form-control form-control-sm" formControlName="temperatura"
-              [class.is-invalid]="isInvalid('temperatura')" />
-            <div class="invalid-feedback d-block">{{ errorMsg('temperatura') }}</div>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Frec. cardiaca (lpm)</label>
-            <input type="number" class="form-control form-control-sm" formControlName="frecuenciaCardiaca" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Frec. respiratoria (rpm)</label>
-            <input type="number" class="form-control form-control-sm" formControlName="frecuenciaRespiratoria" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Mucosas</label>
-            <select class="form-select form-select-sm" formControlName="mucosas">
-              <option value="">Seleccionar...</option>
-              <option *ngFor="let m of mucosasOpciones" [value]="m">{{ m }}</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Próxima visita</label>
-            <input type="date" class="form-control form-control-sm" formControlName="proximaVisita" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Observaciones</label>
-            <input class="form-control form-control-sm" formControlName="observaciones" />
-          </div>
-        </div>
-
-        <div class="mt-4">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <label class="form-label mb-0 fw-semibold">Medicamentos</label>
-            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="agregarMedicamento()">
-              <i class="bi bi-plus me-1"></i>Agregar
-            </button>
-          </div>
-          <div formArrayName="medicamentos" class="d-flex flex-column gap-2">
-            <div class="row g-2 align-items-end" *ngFor="let med of medicamentos.controls; let i = index" [formGroupName]="i">
-              <div class="col-md-4">
-                <input class="form-control form-control-sm" formControlName="nombre" placeholder="Nombre" />
-              </div>
-              <div class="col-md-3">
-                <input class="form-control form-control-sm" formControlName="dosis" placeholder="Dosis" />
-              </div>
-              <div class="col-md-3">
-                <input class="form-control form-control-sm" formControlName="duracion" placeholder="Duración" />
-              </div>
-              <div class="col-md-2">
-                <button type="button" class="btn btn-outline-danger btn-sm w-100" (click)="quitarMedicamento(i)">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex justify-content-end gap-2 mt-4">
-          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cerrarFormulario()">Cancelar</button>
-          <button type="button" class="btn btn-primary btn-sm" (click)="guardarRegistro()">Guardar registro</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <h2 class="h5 fw-semibold mb-3">Registros clínicos</h2>
 
   <div *ngIf="historial().length > 0; else sinHistorial" class="accordion" id="historialAccordion">
     <div class="accordion-item mb-2" *ngFor="let r of historial(); trackBy: trackByRegistroId">
@@ -199,7 +81,6 @@
           <p class="small text-muted mb-3">
             Veterinario: {{ r.veterinario }}
             <span *ngIf="r.creadoPor" class="ms-2">· Registrado por {{ r.creadoPor }}</span>
-            <span *ngIf="r.modificadoPor" class="ms-2">· Editado por {{ r.modificadoPor }}</span>
           </p>
           <div class="row g-3 mb-3">
             <div class="col-md-6">
@@ -220,7 +101,7 @@
             </div>
           </div>
           <div *ngIf="r.medicamentos.length > 0" class="table-responsive">
-            <table class="table table-sm table-bordered mb-3">
+            <table class="table table-sm table-bordered mb-0">
               <thead class="table-light">
                 <tr><th>Medicamento</th><th>Dosis</th><th>Duración</th></tr>
               </thead>
@@ -233,14 +114,6 @@
               </tbody>
             </table>
           </div>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-primary" (click)="abrirEdicion(r)">
-              <i class="bi bi-pencil me-1"></i>Editar
-            </button>
-            <button *appSiPermiso="'eliminar'" type="button" class="btn btn-sm btn-outline-danger" (click)="eliminarRegistro(r)">
-              <i class="bi bi-trash me-1"></i>Eliminar
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -250,8 +123,7 @@
     <div class="card text-center py-5">
       <div class="card-body">
         <i class="bi bi-journal-x display-6 text-muted d-block mb-3"></i>
-        <p class="text-muted mb-3">No hay registros clínicos para esta mascota</p>
-        <button type="button" class="btn btn-primary btn-sm" (click)="abrirFormulario()">Registrar primera consulta</button>
+        <p class="text-muted mb-0">No hay registros clínicos para esta mascota</p>
       </div>
     </div>
   </ng-template>

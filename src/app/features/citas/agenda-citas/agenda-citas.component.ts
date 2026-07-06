@@ -107,9 +107,7 @@ export class AgendaCitasComponent {
   }
 
   completarCita(cita: Cita): void {
-    this.router.navigate(['/historial', cita.mascotaId], {
-      queryParams: { citaId: cita.id, nuevo: '1' }
-    });
+    this.router.navigate(['/atencion', cita.id]);
   }
 
   async eliminar(id: string): Promise<void> {

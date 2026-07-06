@@ -13,9 +13,9 @@
           <strong>{{ item.etiqueta }}</strong>
           <small>{{ item.cita.veterinario }} · {{ item.nombreDueno }}</small>
         </div>
-        <div class="citas-banner-actions" *ngIf="item.cita.estado !== 'completada'">
+        <div class="citas-banner-actions" *ngIf="item.cita.estado === 'pendiente' || item.cita.estado === 'confirmada'">
           <button type="button" class="btn btn-sm btn-light" *ngIf="item.cita.estado === 'pendiente'" (click)="confirmar(item, $event)">Confirmar</button>
-          <button type="button" class="btn btn-sm btn-success" (click)="atender(item, $event)">Atender</button>
+          <button type="button" class="btn btn-sm btn-success" *ngIf="item.cita.estado === 'confirmada'" (click)="atender(item, $event)">Atender</button>
         </div>
       </div>
     </div>

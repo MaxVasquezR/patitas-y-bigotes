@@ -1,0 +1,85 @@
+<div class="page-shell" *ngIf="!noEncontrada; else noExiste">
+  <app-page-header
+    titulo="Atender cita"
+    subtitulo="Registrar diagnóstico, tratamiento y medicamentos"
+    icono="bi-clipboard2-pulse"
+    accionTexto="Volver a la agenda"
+    accionLink="/citas"
+    accionIcono="bi-arrow-left"
+    accionVariant="outline"
+  ></app-page-header>
+
+  <div class="card border-0 shadow-sm mb-4" *ngIf="cita && mascota">
+    <div class="card-body">
+      <div class="row g-3 small">
+        <div class="col-sm-6 col-lg-3"><span class="text-muted d-block">Veterinario</span><strong>{{ veterinario }}</strong></div>
+        <div class="col-sm-6 col-lg-3"><span class="text-muted d-block">Fecha y hora</span><strong>{{ cita.fecha }} {{ cita.hora }}</strong></div>
+        <div class="col-sm-6 col-lg-3"><span class="text-muted d-block">Propietario</span><strong>{{ dueno ? (dueno.nombre + ' ' + dueno.apellido) : '—' }}</strong></div>
+        <div class="col-sm-6 col-lg-3"><span class="text-muted d-block">Mascota</span><strong>{{ mascota.nombre }}</strong></div>
+        <div class="col-sm-6 col-lg-3"><span class="text-muted d-block">Peso</span><strong>{{ mascota.peso }} kg</strong></div>
+        <div class="col-sm-6 col-lg-9"><span class="text-muted d-block">Motivo de la cita</span><strong>{{ cita.motivo }}</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <app-form-required-legend></app-form-required-legend>
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label">Diagnóstico <span class="text-danger">*</span></label>
+          <textarea class="form-control" rows="2" formControlName="diagnostico" [class.is-invalid]="isInvalid('diagnostico')"></textarea>
+          <div class="invalid-feedback d-block">{{ errorMsg('diagnostico') }}</div>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Tratamiento <span class="text-danger">*</span></label>
+          <textarea class="form-control" rows="2" formControlName="tratamiento" [class.is-invalid]="isInvalid('tratamiento')"></textarea>
+          <div class="invalid-feedback d-block">{{ errorMsg('tratamiento') }}</div>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Observaciones</label>
+          <textarea class="form-control" rows="2" formControlName="observaciones"></textarea>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="form-label mb-0 fw-semibold">Medicamentos</label>
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="agregarMedicamento()">
+            <i class="bi bi-plus me-1"></i>Agregar
+          </button>
+        </div>
+        <div formArrayName="medicamentos" class="d-flex flex-column gap-2">
+          <div class="row g-2 align-items-end" *ngFor="let med of medicamentos.controls; let i = index" [formGroupName]="i">
+            <div class="col-md-4">
+              <input class="form-control form-control-sm" formControlName="nombre" placeholder="Nombre" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control form-control-sm" formControlName="dosis" placeholder="Dosis" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control form-control-sm" formControlName="duracion" placeholder="Duración" />
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-outline-danger btn-sm w-100" (click)="quitarMedicamento(i)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+          <p class="text-muted small mb-0" *ngIf="medicamentos.length === 0">Sin medicamentos agregados</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white d-flex gap-2">
+      <button type="button" class="btn btn-primary" (click)="guardar()">Guardar atención</button>
+      <a routerLink="/citas" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<ng-template #noExiste>
+  <div class="page-shell text-center py-5">
+    <p class="text-muted mb-3">Cita no encontrada</p>
+    <a routerLink="/citas" class="btn btn-primary btn-sm">Volver a la agenda</a>
+  </div>
+</ng-template>
