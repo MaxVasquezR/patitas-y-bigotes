@@ -18,6 +18,7 @@ export interface Mascota {
   id: string;
   nombre: string;
   especie: EspecieMascota;
+  otraEspecie?: string;
   raza: string;
   fechaNacimiento: string;
   sexo: SexoMascota;

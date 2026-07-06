@@ -29,7 +29,7 @@
             </span>
             <div class="min-w-0">
               <h3 class="h6 fw-semibold mb-0 text-truncate">{{ m.nombre }}</h3>
-              <span class="badge bg-light text-dark border mt-1">{{ m.especie | especie: 'label' }}</span>
+              <span class="badge bg-light text-dark border mt-1">{{ m.especie === 'otro' ? m.otraEspecie : (m.especie | especie: 'label') }}</span>
               <p class="text-muted small mb-0 mt-1">{{ m.raza }}</p>
             </div>
           </div>

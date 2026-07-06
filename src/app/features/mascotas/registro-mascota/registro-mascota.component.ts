@@ -50,6 +50,7 @@ export class RegistroMascotaComponent implements OnInit {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       especie: ['', Validators.required],
+      otraEspecie: ['', Validators.maxLength(50)],
       raza: ['', [Validators.required, Validators.maxLength(80)]],
       fechaNacimiento: ['', [Validators.required, noFutureDateValidator()]],
       sexo: ['', Validators.required],
@@ -81,6 +82,17 @@ export class RegistroMascotaComponent implements OnInit {
       this.onDuenoSeleccionado();
     }
     this.form.get('dueno_modo')?.valueChanges.subscribe(m => this.setModoDueno(m as ModoDueno));
+    this.form.get('especie')?.valueChanges.subscribe(e => this.setOtraEspecieValidator(e));
+  }
+
+  private setOtraEspecieValidator(especie: string): void {
+    const ctrl = this.form.get('otraEspecie');
+    if (especie === 'otro') {
+      ctrl?.setValidators([Validators.required, Validators.maxLength(50)]);
+    } else {
+      ctrl?.setValidators([Validators.maxLength(50)]);
+    }
+    ctrl?.updateValueAndValidity();
   }
 
   setModoDueno(modo: ModoDueno): void {
@@ -112,7 +124,7 @@ export class RegistroMascotaComponent implements OnInit {
   }
 
   paso1Valido(): boolean {
-    return ['nombre', 'especie', 'raza', 'fechaNacimiento', 'sexo', 'peso', 'color', 'estado']
+    return ['nombre', 'especie', 'otraEspecie', 'raza', 'fechaNacimiento', 'sexo', 'peso', 'color', 'estado']
       .every(k => this.form.get(k)?.valid);
   }
 
@@ -175,6 +187,7 @@ export class RegistroMascotaComponent implements OnInit {
     const mascota = this.mascotaService.addMascota({
       nombre: v.nombre,
       especie: v.especie,
+      otraEspecie: v.especie === 'otro' ? v.otraEspecie : undefined,
       raza: v.raza,
       fechaNacimiento: v.fechaNacimiento,
       sexo: v.sexo,

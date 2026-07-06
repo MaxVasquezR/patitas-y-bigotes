@@ -25,6 +25,11 @@
             <option *ngFor="let e of especies" [value]="e">{{ e | titlecase }}</option>
           </select>
         </div>
+        <div class="col-md-6" *ngIf="form.get('especie')?.value === 'otro'">
+          <label class="form-label">Especifique la especie *</label>
+          <input class="form-control" formControlName="otraEspecie" [class.is-invalid]="isInvalid('otraEspecie')" />
+          <div class="invalid-feedback d-block">{{ errorMsg('otraEspecie') }}</div>
+        </div>
         <div class="col-md-6">
           <label class="form-label">Raza *</label>
           <input class="form-control" formControlName="raza" [class.is-invalid]="isInvalid('raza')" />

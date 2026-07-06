@@ -85,6 +85,21 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     observaciones: 'Control post-operatorio programado',
     fechaRegistro: '2022-06-01',
     dueno: DUENOS_INICIALES[2]
+  },
+  {
+    id: '4',
+    nombre: 'Copito',
+    especie: 'otro',
+    otraEspecie: 'Hámster',
+    raza: 'Sirio',
+    fechaNacimiento: '2024-02-10',
+    sexo: 'macho',
+    peso: 0.15,
+    color: 'Blanco',
+    castrado: false,
+    estado: 'activo',
+    fechaRegistro: '2024-03-01',
+    dueno: DUENOS_INICIALES[0]
   }
 ];
 

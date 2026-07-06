@@ -38,6 +38,7 @@ export class EditarMascotaComponent implements OnInit {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       especie: ['', Validators.required],
+      otraEspecie: ['', Validators.maxLength(50)],
       raza: ['', [Validators.required, Validators.maxLength(80)]],
       fechaNacimiento: ['', Validators.required],
       sexo: ['', Validators.required],
@@ -49,6 +50,17 @@ export class EditarMascotaComponent implements OnInit {
       dueno_email: ['', [Validators.required, Validators.email]],
       dueno_direccion: ['', [Validators.required, Validators.maxLength(200)]]
     });
+    this.form.get('especie')?.valueChanges.subscribe(e => this.setOtraEspecieValidator(e));
+  }
+
+  private setOtraEspecieValidator(especie: string): void {
+    const ctrl = this.form.get('otraEspecie');
+    if (especie === 'otro') {
+      ctrl?.setValidators([Validators.required, Validators.maxLength(50)]);
+    } else {
+      ctrl?.setValidators([Validators.maxLength(50)]);
+    }
+    ctrl?.updateValueAndValidity();
   }
 
   ngOnInit(): void {
@@ -61,6 +73,7 @@ export class EditarMascotaComponent implements OnInit {
     this.form.patchValue({
       nombre: m.nombre,
       especie: m.especie,
+      otraEspecie: m.otraEspecie,
       raza: m.raza,
       fechaNacimiento: m.fechaNacimiento,
       sexo: m.sexo,
@@ -86,6 +99,7 @@ export class EditarMascotaComponent implements OnInit {
     this.mascotaService.updateMascota(this.mascotaId, {
       nombre: v.nombre,
       especie: v.especie,
+      otraEspecie: v.especie === 'otro' ? v.otraEspecie : undefined,
       raza: v.raza,
       fechaNacimiento: v.fechaNacimiento,
       sexo: v.sexo,

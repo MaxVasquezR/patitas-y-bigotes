@@ -20,6 +20,7 @@ export function normalizarMascota(m: Partial<Mascota> & { id: string; dueno: Par
     id: m.id,
     nombre: m.nombre ?? '',
     especie: m.especie ?? 'perro',
+    otraEspecie: m.otraEspecie,
     raza: m.raza ?? '',
     fechaNacimiento: m.fechaNacimiento ?? '',
     sexo: m.sexo ?? 'macho',

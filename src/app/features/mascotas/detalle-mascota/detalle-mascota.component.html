@@ -1,7 +1,7 @@
 <div class="page-shell" *ngIf="mascota() as mascota; else noEncontrada">
   <app-page-header
     [titulo]="mascota.nombre"
-    [subtitulo]="mascota.raza + ' · ' + (mascota.especie | especie: 'label')"
+    [subtitulo]="mascota.raza + ' · ' + (mascota.especie === 'otro' ? mascota.otraEspecie : (mascota.especie | especie: 'label'))"
     icono="bi-heart-pulse"
     accionTexto="Volver"
     accionLink="/mascotas"
@@ -52,7 +52,7 @@
                 <i class="bi {{ mascota.especie | especie: 'icono' }}"></i>
               </span>
               <div>
-                <span class="badge bg-light text-dark border">{{ mascota.especie | especie: 'label' }}</span>
+                <span class="badge bg-light text-dark border">{{ mascota.especie === 'otro' ? mascota.otraEspecie : (mascota.especie | especie: 'label') }}</span>
                 <p class="text-muted small mb-0 mt-1">{{ mascota.sexo | titlecase }}</p>
               </div>
             </div>
