@@ -1,20 +1,16 @@
 export type EspecieMascota = 'perro' | 'gato' | 'ave' | 'conejo' | 'otro';
 export type SexoMascota = 'macho' | 'hembra';
-export type TipoDocumento = 'DNI' | 'CE' | 'PASAPORTE';
 export type EstadoMascota = 'activo' | 'en_tratamiento' | 'referido' | 'fallecido';
 
 export interface Dueno {
   id: string;
   nombre: string;
   apellido: string;
-  tipoDocumento: TipoDocumento;
   numeroDocumento: string;
   telefono: string;
-  telefonoAlt?: string;
-  email: string;
+  email?: string;
   direccion: string;
   distrito: string;
-  contactoEmergencia?: string;
   aceptaDatos: boolean;
 }
 

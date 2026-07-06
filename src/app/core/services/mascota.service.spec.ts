@@ -35,7 +35,6 @@ describe('MascotaService', () => {
         id: 'dx',
         nombre: 'Test',
         apellido: 'User',
-        tipoDocumento: 'DNI',
         numeroDocumento: '88776655',
         telefono: '999999999',
         email: 'test@test.com',

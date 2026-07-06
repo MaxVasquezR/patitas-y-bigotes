@@ -18,7 +18,6 @@ describe('DuenoService', () => {
     const resultado = service.addDueno({
       nombre: 'Juan',
       apellido: 'Pérez',
-      tipoDocumento: 'DNI',
       numeroDocumento: '70998877',
       telefono: '911111111',
       email: 'juan@test.com',

@@ -6,14 +6,11 @@ export function normalizarDueno(d: Partial<Dueno> & { id: string }): Dueno {
     id: d.id,
     nombre: d.nombre ?? '',
     apellido: d.apellido ?? '',
-    tipoDocumento: d.tipoDocumento ?? 'DNI',
     numeroDocumento: d.numeroDocumento ?? '',
     telefono: d.telefono ?? '',
-    telefonoAlt: d.telefonoAlt,
-    email: d.email ?? '',
+    email: d.email,
     direccion: d.direccion ?? '',
     distrito: d.distrito ?? '',
-    contactoEmergencia: d.contactoEmergencia,
     aceptaDatos: d.aceptaDatos ?? true
   };
 }

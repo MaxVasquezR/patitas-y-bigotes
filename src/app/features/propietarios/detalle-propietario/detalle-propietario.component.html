@@ -24,11 +24,10 @@
         <div class="card-header">Contacto</div>
         <div class="card-body">
           <table class="table table-sm table-borderless mb-0">
-            <tr><td class="text-muted">Documento</td><td>{{ p.tipoDocumento }} {{ p.numeroDocumento }}</td></tr>
+            <tr><td class="text-muted">DNI</td><td>{{ p.numeroDocumento }}</td></tr>
             <tr><td class="text-muted">Teléfono</td><td>{{ p.telefono | telefono }}</td></tr>
-            <tr><td class="text-muted">Email</td><td>{{ p.email }}</td></tr>
+            <tr *ngIf="p.email"><td class="text-muted">Email</td><td>{{ p.email }}</td></tr>
             <tr><td class="text-muted">Dirección</td><td>{{ p.direccion }}, {{ p.distrito }}</td></tr>
-            <tr *ngIf="p.contactoEmergencia"><td class="text-muted">Emergencia</td><td>{{ p.contactoEmergencia }}</td></tr>
           </table>
         </div>
       </div>

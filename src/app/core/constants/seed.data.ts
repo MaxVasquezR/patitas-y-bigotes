@@ -8,21 +8,17 @@ export const DUENOS_INICIALES: Dueno[] = [
     id: 'd1',
     nombre: 'Carlos',
     apellido: 'Mendoza',
-    tipoDocumento: 'DNI',
     numeroDocumento: '45678901',
     telefono: '987654321',
-    telefonoAlt: '912345678',
     email: 'carlos@email.com',
     direccion: 'Av. Javier Prado 120',
     distrito: 'Miraflores',
-    contactoEmergencia: 'Laura Mendoza — 987111222',
     aceptaDatos: true
   },
   {
     id: 'd2',
     nombre: 'María',
     apellido: 'Torres',
-    tipoDocumento: 'DNI',
     numeroDocumento: '42345678',
     telefono: '945678321',
     email: 'maria@email.com',
@@ -34,13 +30,11 @@ export const DUENOS_INICIALES: Dueno[] = [
     id: 'd3',
     nombre: 'Ana',
     apellido: 'García',
-    tipoDocumento: 'DNI',
     numeroDocumento: '40123456',
     telefono: '912345678',
     email: 'ana@email.com',
     direccion: 'Jr. Lima 89',
     distrito: 'Surco',
-    contactoEmergencia: 'Pedro García — 998877665',
     aceptaDatos: true
   }
 ];

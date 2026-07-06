@@ -7,7 +7,6 @@ import { MascotaService } from '../../../core/services/mascota.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { TIPOS_DOCUMENTO } from '../../../core/constants/app.constants';
 import { PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 import { FormRequiredLegendComponent } from '../../../shared/components/form-required-legend/form-required-legend.component';
 import { getFormErrorMessage, isFieldInvalid } from '../../../shared/utils/form-errors.util';
@@ -26,7 +25,6 @@ export class EditarPropietarioComponent implements OnInit {
   form: FormGroup;
   propietarioId = '';
   noEncontrado = false;
-  readonly tiposDocumento = TIPOS_DOCUMENTO;
 
   constructor(
     private fb: FormBuilder,
@@ -41,14 +39,11 @@ export class EditarPropietarioComponent implements OnInit {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
       apellido: ['', [Validators.required, Validators.minLength(2)]],
-      tipoDocumento: ['DNI', Validators.required],
       numeroDocumento: ['', [Validators.required, documentoValidator()]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-      telefonoAlt: ['', Validators.pattern(/^[0-9]{9}$/)],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', Validators.email],
       direccion: ['', [Validators.required, Validators.maxLength(200)]],
-      distrito: ['', [Validators.required, Validators.maxLength(80)]],
-      contactoEmergencia: ['', Validators.maxLength(120)]
+      distrito: ['', [Validators.required, Validators.maxLength(80)]]
     });
   }
 
