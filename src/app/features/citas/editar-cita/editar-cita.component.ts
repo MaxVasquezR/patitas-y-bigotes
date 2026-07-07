@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { CitaService } from '../../../core/services/cita.service';
 import { MascotaService } from '../../../core/services/mascota.service';
+import { DuenoService } from '../../../core/services/dueno.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -39,6 +40,7 @@ export class EditarCitaComponent implements OnInit {
     private router: Router,
     private citaService: CitaService,
     private mascotaService: MascotaService,
+    private duenoService: DuenoService,
     private auth: AuthService,
     private audit: AuditService,
     private toast: ToastService
@@ -75,6 +77,11 @@ export class EditarCitaComponent implements OnInit {
     });
   }
 
+  nombreDueno(m: Mascota): string {
+    const d = this.duenoService.getDuenoById(m.duenoId);
+    return d ? `${d.nombre} ${d.apellido}` : '';
+  }
+
   guardar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -86,12 +93,8 @@ export class EditarCitaComponent implements OnInit {
       this.toast.warning('Seleccione una mascota válida');
       return;
     }
-
     const resultado = this.citaService.updateCita(this.citaId, {
       mascotaId: v.mascotaId,
-      nombreMascota: m.nombre,
-      nombreDueno: `${m.dueno.nombre} ${m.dueno.apellido}`,
-      telefonoDueno: m.dueno.telefono,
       fecha: v.fecha,
       hora: v.hora,
       tipo: v.tipo,

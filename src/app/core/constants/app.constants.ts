@@ -1,4 +1,4 @@
-import { EspecieMascota, SexoMascota, TipoDocumento, EstadoMascota } from '../models/mascota.model';
+import { EspecieMascota, SexoMascota, EstadoMascota } from '../models/mascota.model';
 import { EstadoCita, TipoCita } from '../models/cita.model';
 
 export const CLINICA_NOMBRE = 'Patitas y Bigotes';
@@ -9,7 +9,6 @@ export const CLINICA_HORARIO = 'Lun–Sáb 8:00 – 19:00 · Emergencias 24h';
 
 export const ESPECIES: EspecieMascota[] = ['perro', 'gato', 'ave', 'conejo', 'otro'];
 export const SEXOS: SexoMascota[] = ['macho', 'hembra'];
-export const TIPOS_DOCUMENTO: TipoDocumento[] = ['DNI', 'CE', 'PASAPORTE'];
 export const ESTADOS_MASCOTA: EstadoMascota[] = ['activo', 'en_tratamiento', 'referido', 'fallecido'];
 export const MUCOSAS_OPCIONES = ['Rosadas', 'Pálidas', 'Cianóticas', 'Ictéricas', 'Secas'];
 

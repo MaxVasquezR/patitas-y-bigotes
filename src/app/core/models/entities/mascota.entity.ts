@@ -1,5 +1,4 @@
 import { Mascota } from '../mascota.model';
-import { DuenoEntity } from './dueno.entity';
 
 export class MascotaEntity {
   constructor(private readonly data: Mascota) {}
@@ -9,7 +8,7 @@ export class MascotaEntity {
   get especie() { return this.data.especie; }
   get raza(): string { return this.data.raza; }
   get peso(): number { return this.data.peso; }
-  get dueno(): DuenoEntity { return DuenoEntity.from(this.data.dueno); }
+  get duenoId(): string { return this.data.duenoId; }
 
   calcularEdad(): string {
     const hoy = new Date();

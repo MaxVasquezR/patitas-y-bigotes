@@ -1,0 +1,74 @@
+<div class="page-shell">
+  <app-page-header
+    titulo="Usuarios y roles"
+    subtitulo="Gestión de accesos del personal de la clínica"
+    icono="bi-person-gear"
+    accionTexto="Nuevo usuario"
+    accionLink="/usuarios/nuevo"
+    accionIcono="bi-person-plus"
+  ></app-page-header>
+
+  <div class="mb-4">
+    <div class="input-group">
+      <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar por username o nombre..."
+        [formControl]="busquedaControl"
+      />
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm" *ngIf="usuarios().length > 0; else sinResultados">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Username</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuarios(); trackBy: trackByUsuarioId">
+            <td><strong>{{ u.username }}</strong></td>
+            <td>{{ u.nombre }}</td>
+            <td>
+              <span class="badge" [class.bg-danger-subtle]="u.rol === 'admin'" [class.text-danger]="u.rol === 'admin'"
+                    [class.bg-primary-subtle]="u.rol === 'asistente'" [class.text-primary]="u.rol === 'asistente'">
+                {{ labelRol(u) }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [class.bg-success-subtle]="u.activo" [class.text-success]="u.activo"
+                    [class.bg-secondary-subtle]="!u.activo" [class.text-secondary]="!u.activo">
+                {{ u.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td class="text-end">
+              <a [routerLink]="['/usuarios', u.id, 'editar']" class="btn btn-sm btn-outline-secondary me-1" title="Editar">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <button class="btn btn-sm" [class.btn-outline-warning]="u.activo" [class.btn-outline-success]="!u.activo"
+                      (click)="toggleActivo(u)" [title]="u.activo ? 'Desactivar' : 'Activar'">
+                <i class="bi" [class.bi-person-dash]="u.activo" [class.bi-person-check]="!u.activo"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #sinResultados>
+    <app-empty-state
+      icono="bi-person-gear"
+      mensaje="No se encontraron usuarios"
+      accionTexto="Registrar primer usuario"
+      accionLink="/usuarios/nuevo"
+    ></app-empty-state>
+  </ng-template>
+</div>

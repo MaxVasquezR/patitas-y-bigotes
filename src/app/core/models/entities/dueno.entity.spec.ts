@@ -5,7 +5,6 @@ describe('DuenoEntity', () => {
     id: 'd1',
     nombre: 'Carlos',
     apellido: 'Mendoza',
-    tipoDocumento: 'DNI',
     numeroDocumento: '45678901',
     telefono: '987654321',
     email: 'carlos@email.com',

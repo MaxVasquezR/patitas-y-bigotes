@@ -44,6 +44,15 @@ export class DashboardComponent implements OnDestroy {
   readonly ultimasMascotas = computed(() => [...this.mascotaService.mascotas()].slice(-3).reverse());
   readonly nombreUsuario = computed(() => this.auth.nombreUsuario());
 
+  nombreDueno(duenoId: string): string {
+    const d = this.duenoService.getDuenoById(duenoId);
+    return d ? `${d.nombre} ${d.apellido}` : '';
+  }
+
+  nombreMascota(mascotaId: string): string {
+    return this.mascotaService.getMascotaById(mascotaId)?.nombre ?? '';
+  }
+
   constructor(
     private mascotaService: MascotaService,
     private citaService: CitaService,
@@ -61,14 +70,12 @@ export class DashboardComponent implements OnDestroy {
   cambiarEstado(cita: Cita, estado: EstadoCita): void {
     this.citaService.updateEstado(cita.id, estado);
     const s = this.auth.getSesionActual();
-    if (s) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${cita.nombreMascota} → ${estado}`);
+    if (s) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${this.nombreMascota(cita.mascotaId)} → ${estado}`);
     this.toast.success(`Cita marcada como ${estado}`);
   }
 
   completarCita(cita: Cita): void {
-    this.router.navigate(['/historial', cita.mascotaId], {
-      queryParams: { citaId: cita.id, nuevo: '1' }
-    });
+    this.router.navigate(['/atencion', cita.id]);
   }
 
   private formatearReloj(): string {

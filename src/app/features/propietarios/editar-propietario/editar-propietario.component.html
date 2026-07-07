@@ -23,13 +23,7 @@
           <input class="form-control" formControlName="apellido" [class.is-invalid]="isInvalid('apellido')" />
         </div>
         <div class="col-md-4">
-          <label class="form-label">Tipo documento <span class="text-danger">*</span></label>
-          <select class="form-select" formControlName="tipoDocumento">
-            <option *ngFor="let t of tiposDocumento" [value]="t">{{ t }}</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">N.º documento <span class="text-danger">*</span></label>
+          <label class="form-label">DNI <span class="text-danger">*</span></label>
           <input class="form-control" formControlName="numeroDocumento" maxlength="8" [class.is-invalid]="isInvalid('numeroDocumento')" />
           <div class="invalid-feedback d-block">{{ errorMsg('numeroDocumento') }}</div>
         </div>
@@ -37,21 +31,13 @@
           <label class="form-label">Distrito <span class="text-danger">*</span></label>
           <input class="form-control" formControlName="distrito" [class.is-invalid]="isInvalid('distrito')" />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label class="form-label">Teléfono <span class="text-danger">*</span></label>
           <input class="form-control" formControlName="telefono" maxlength="9" [class.is-invalid]="isInvalid('telefono')" />
         </div>
         <div class="col-md-6">
-          <label class="form-label">Teléfono alternativo</label>
-          <input class="form-control" formControlName="telefonoAlt" maxlength="9" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Email <span class="text-danger">*</span></label>
+          <label class="form-label">Email <span class="text-muted">(opcional)</span></label>
           <input type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalid('email')" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Contacto emergencia</label>
-          <input class="form-control" formControlName="contactoEmergencia" />
         </div>
         <div class="col-12">
           <label class="form-label">Dirección <span class="text-danger">*</span></label>

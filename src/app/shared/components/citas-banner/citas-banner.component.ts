@@ -42,9 +42,7 @@ export class CitasBannerComponent {
 
   atender(item: CitaBanner, event: Event): void {
     event.stopPropagation();
-    this.router.navigate(['/historial', item.cita.mascotaId], {
-      queryParams: { citaId: item.cita.id, nuevo: '1' }
-    });
+    this.router.navigate(['/atencion', item.cita.id]);
   }
 
   verAgenda(): void {
@@ -54,7 +52,7 @@ export class CitasBannerComponent {
   private cambiarEstado(item: CitaBanner, estado: EstadoCita): void {
     this.citaService.updateEstado(item.cita.id, estado);
     const s = this.auth.getSesionActual();
-    if (s) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${item.cita.nombreMascota} → ${estado}`);
+    if (s) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${item.nombreMascota} → ${estado}`);
     this.toast.success(`Cita ${estado}`);
   }
 

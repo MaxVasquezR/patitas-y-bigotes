@@ -1,7 +1,7 @@
 <div class="page-shell" *ngIf="mascota() as mascota; else noEncontrada">
   <app-page-header
     [titulo]="mascota.nombre"
-    [subtitulo]="mascota.raza + ' · ' + (mascota.especie | especie: 'label')"
+    [subtitulo]="mascota.raza + ' · ' + (mascota.especie === 'otro' ? mascota.otraEspecie : (mascota.especie | especie: 'label'))"
     icono="bi-heart-pulse"
     accionTexto="Volver"
     accionLink="/mascotas"
@@ -52,7 +52,7 @@
                 <i class="bi {{ mascota.especie | especie: 'icono' }}"></i>
               </span>
               <div>
-                <span class="badge bg-light text-dark border">{{ mascota.especie | especie: 'label' }}</span>
+                <span class="badge bg-light text-dark border">{{ mascota.especie === 'otro' ? mascota.otraEspecie : (mascota.especie | especie: 'label') }}</span>
                 <p class="text-muted small mb-0 mt-1">{{ mascota.sexo | titlecase }}</p>
               </div>
             </div>
@@ -68,17 +68,17 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-6" *ngIf="dueno() as propietario">
         <div class="card h-100">
           <div class="card-header">Propietario</div>
           <div class="card-body">
             <table class="table table-sm table-borderless mb-0">
-              <tr><td class="text-muted">Nombre</td><td>{{ mascota.dueno.nombre }} {{ mascota.dueno.apellido }}</td></tr>
-              <tr><td class="text-muted">Teléfono</td><td>{{ mascota.dueno.telefono | telefono }}</td></tr>
-              <tr><td class="text-muted">Email</td><td>{{ mascota.dueno.email }}</td></tr>
-              <tr><td class="text-muted">Dirección</td><td>{{ mascota.dueno.direccion }}</td></tr>
+              <tr><td class="text-muted">Nombre</td><td>{{ propietario.nombre }} {{ propietario.apellido }}</td></tr>
+              <tr><td class="text-muted">Teléfono</td><td>{{ propietario.telefono | telefono }}</td></tr>
+              <tr><td class="text-muted">Email</td><td>{{ propietario.email }}</td></tr>
+              <tr><td class="text-muted">Dirección</td><td>{{ propietario.direccion }}</td></tr>
             </table>
-            <a [routerLink]="['/propietarios', mascota.dueno.id]" class="btn btn-sm btn-link p-0 mt-2">Ver ficha del propietario</a>
+            <a [routerLink]="['/propietarios', propietario.id]" class="btn btn-sm btn-link p-0 mt-2">Ver ficha del propietario</a>
           </div>
         </div>
       </div>

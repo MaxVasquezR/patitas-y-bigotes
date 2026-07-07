@@ -40,6 +40,11 @@
               <option *ngFor="let e of especies" [value]="e">{{ e | titlecase }}</option>
             </select>
           </div>
+          <div class="col-md-6" *ngIf="form.get('especie')?.value === 'otro'">
+            <label class="form-label">Especifique la especie <span class="text-danger">*</span></label>
+            <input class="form-control" formControlName="otraEspecie" [class.is-invalid]="isInvalid('otraEspecie')" />
+            <div class="invalid-feedback d-block">{{ errorMsg('otraEspecie') }}</div>
+          </div>
           <div class="col-md-6">
             <label class="form-label">Raza <span class="text-danger">*</span></label>
             <input class="form-control" formControlName="raza" [class.is-invalid]="isInvalid('raza')" />
@@ -121,12 +126,6 @@
             <input class="form-control" formControlName="dueno_apellido" [class.is-invalid]="isInvalid('dueno_apellido')" />
           </div>
           <div class="col-md-4">
-            <label class="form-label">Tipo doc.</label>
-            <select class="form-select" formControlName="dueno_tipoDocumento">
-              <option *ngFor="let t of tiposDocumento" [value]="t">{{ t }}</option>
-            </select>
-          </div>
-          <div class="col-md-4">
             <label class="form-label">N.º documento <span class="text-danger">*</span></label>
             <input class="form-control" formControlName="dueno_numeroDocumento" maxlength="8" [class.is-invalid]="isInvalid('dueno_numeroDocumento')" />
           </div>
@@ -139,7 +138,7 @@
             <input class="form-control" formControlName="dueno_telefono" maxlength="9" [class.is-invalid]="isInvalid('dueno_telefono')" />
           </div>
           <div class="col-md-6">
-            <label class="form-label">Email <span class="text-danger">*</span></label>
+            <label class="form-label">Email</label>
             <input type="email" class="form-control" formControlName="dueno_email" [class.is-invalid]="isInvalid('dueno_email')" />
           </div>
           <div class="col-12">

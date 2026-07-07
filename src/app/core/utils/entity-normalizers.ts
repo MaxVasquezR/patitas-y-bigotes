@@ -6,23 +6,21 @@ export function normalizarDueno(d: Partial<Dueno> & { id: string }): Dueno {
     id: d.id,
     nombre: d.nombre ?? '',
     apellido: d.apellido ?? '',
-    tipoDocumento: d.tipoDocumento ?? 'DNI',
     numeroDocumento: d.numeroDocumento ?? '',
     telefono: d.telefono ?? '',
-    telefonoAlt: d.telefonoAlt,
-    email: d.email ?? '',
+    email: d.email,
     direccion: d.direccion ?? '',
     distrito: d.distrito ?? '',
-    contactoEmergencia: d.contactoEmergencia,
     aceptaDatos: d.aceptaDatos ?? true
   };
 }
 
-export function normalizarMascota(m: Partial<Mascota> & { id: string; dueno: Partial<Dueno> & { id: string } }): Mascota {
+export function normalizarMascota(m: Partial<Mascota> & { id: string; duenoId: string }): Mascota {
   return {
     id: m.id,
     nombre: m.nombre ?? '',
     especie: m.especie ?? 'perro',
+    otraEspecie: m.otraEspecie,
     raza: m.raza ?? '',
     fechaNacimiento: m.fechaNacimiento ?? '',
     sexo: m.sexo ?? 'macho',
@@ -33,7 +31,7 @@ export function normalizarMascota(m: Partial<Mascota> & { id: string; dueno: Par
     castrado: m.castrado ?? false,
     estado: m.estado ?? 'activo',
     observaciones: m.observaciones,
-    dueno: normalizarDueno(m.dueno),
+    duenoId: m.duenoId,
     foto: m.foto,
     fechaRegistro: m.fechaRegistro ?? new Date().toISOString().split('T')[0]
   };
@@ -51,7 +49,7 @@ export function normalizarHistorial(r: Partial<RegistroHistorial> & { id: string
     tratamiento: r.tratamiento ?? '',
     medicamentos: r.medicamentos ?? [],
     peso: r.peso ?? 0,
-    temperatura: r.temperatura ?? 38.5,
+    temperatura: r.temperatura,
     frecuenciaCardiaca: r.frecuenciaCardiaca,
     frecuenciaRespiratoria: r.frecuenciaRespiratoria,
     mucosas: r.mucosas,

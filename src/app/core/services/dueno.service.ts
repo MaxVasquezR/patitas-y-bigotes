@@ -39,7 +39,7 @@ export class DuenoService {
 
   findByTelefono(telefono: string): Dueno | undefined {
     const t = telefono.trim();
-    return this._duenos().find(d => d.telefono === t || d.telefonoAlt === t);
+    return this._duenos().find(d => d.telefono === t);
   }
 
   existeDuplicado(dueno: Partial<Dueno>, excludeId?: string): string | null {
@@ -87,21 +87,9 @@ export class DuenoService {
       d.apellido.toLowerCase().includes(q) ||
       d.telefono.includes(q) ||
       d.numeroDocumento.includes(q) ||
-      d.email.toLowerCase().includes(q) ||
+      (d.email?.toLowerCase().includes(q) ?? false) ||
       d.distrito.toLowerCase().includes(q)
     );
-  }
-
-  upsertDueno(dueno: Dueno): Dueno {
-    const existe = this._duenos().find(d => d.id === dueno.id);
-    const normalizado = normalizarDueno(dueno);
-    if (existe) {
-      this.updateDueno(dueno.id, normalizado);
-      return normalizado;
-    }
-    this._duenos.update(list => [...list, normalizado]);
-    this.persist();
-    return normalizado;
   }
 
   private persist(): void {

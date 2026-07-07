@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MascotaService } from '../../../core/services/mascota.service';
+import { DuenoService } from '../../../core/services/dueno.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -31,6 +32,7 @@ export class EditarMascotaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private mascotaService: MascotaService,
+    private duenoService: DuenoService,
     private auth: AuthService,
     private audit: AuditService,
     private toast: ToastService
@@ -38,6 +40,7 @@ export class EditarMascotaComponent implements OnInit {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       especie: ['', Validators.required],
+      otraEspecie: ['', Validators.maxLength(50)],
       raza: ['', [Validators.required, Validators.maxLength(80)]],
       fechaNacimiento: ['', Validators.required],
       sexo: ['', Validators.required],
@@ -49,6 +52,17 @@ export class EditarMascotaComponent implements OnInit {
       dueno_email: ['', [Validators.required, Validators.email]],
       dueno_direccion: ['', [Validators.required, Validators.maxLength(200)]]
     });
+    this.form.get('especie')?.valueChanges.subscribe(e => this.setOtraEspecieValidator(e));
+  }
+
+  private setOtraEspecieValidator(especie: string): void {
+    const ctrl = this.form.get('otraEspecie');
+    if (especie === 'otro') {
+      ctrl?.setValidators([Validators.required, Validators.maxLength(50)]);
+    } else {
+      ctrl?.setValidators([Validators.maxLength(50)]);
+    }
+    ctrl?.updateValueAndValidity();
   }
 
   ngOnInit(): void {
@@ -58,19 +72,21 @@ export class EditarMascotaComponent implements OnInit {
       this.noEncontrada = true;
       return;
     }
+    const dueno = this.duenoService.getDuenoById(m.duenoId);
     this.form.patchValue({
       nombre: m.nombre,
       especie: m.especie,
+      otraEspecie: m.otraEspecie,
       raza: m.raza,
       fechaNacimiento: m.fechaNacimiento,
       sexo: m.sexo,
       peso: m.peso,
       color: m.color,
-      dueno_nombre: m.dueno.nombre,
-      dueno_apellido: m.dueno.apellido,
-      dueno_telefono: m.dueno.telefono,
-      dueno_email: m.dueno.email,
-      dueno_direccion: m.dueno.direccion
+      dueno_nombre: dueno?.nombre,
+      dueno_apellido: dueno?.apellido,
+      dueno_telefono: dueno?.telefono,
+      dueno_email: dueno?.email,
+      dueno_direccion: dueno?.direccion
     });
   }
 
@@ -86,19 +102,20 @@ export class EditarMascotaComponent implements OnInit {
     this.mascotaService.updateMascota(this.mascotaId, {
       nombre: v.nombre,
       especie: v.especie,
+      otraEspecie: v.especie === 'otro' ? v.otraEspecie : undefined,
       raza: v.raza,
       fechaNacimiento: v.fechaNacimiento,
       sexo: v.sexo,
       peso: +v.peso,
-      color: v.color,
-      dueno: {
-        ...actual.dueno,
-        nombre: v.dueno_nombre,
-        apellido: v.dueno_apellido,
-        telefono: v.dueno_telefono,
-        email: v.dueno_email,
-        direccion: v.dueno_direccion
-      }
+      color: v.color
+    });
+
+    this.duenoService.updateDueno(actual.duenoId, {
+      nombre: v.dueno_nombre,
+      apellido: v.dueno_apellido,
+      telefono: v.dueno_telefono,
+      email: v.dueno_email,
+      direccion: v.dueno_direccion
     });
 
     const s = this.auth.getSesionActual();

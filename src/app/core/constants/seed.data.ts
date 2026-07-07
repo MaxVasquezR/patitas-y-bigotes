@@ -8,21 +8,17 @@ export const DUENOS_INICIALES: Dueno[] = [
     id: 'd1',
     nombre: 'Carlos',
     apellido: 'Mendoza',
-    tipoDocumento: 'DNI',
     numeroDocumento: '45678901',
     telefono: '987654321',
-    telefonoAlt: '912345678',
     email: 'carlos@email.com',
     direccion: 'Av. Javier Prado 120',
     distrito: 'Miraflores',
-    contactoEmergencia: 'Laura Mendoza — 987111222',
     aceptaDatos: true
   },
   {
     id: 'd2',
     nombre: 'María',
     apellido: 'Torres',
-    tipoDocumento: 'DNI',
     numeroDocumento: '42345678',
     telefono: '945678321',
     email: 'maria@email.com',
@@ -34,13 +30,11 @@ export const DUENOS_INICIALES: Dueno[] = [
     id: 'd3',
     nombre: 'Ana',
     apellido: 'García',
-    tipoDocumento: 'DNI',
     numeroDocumento: '40123456',
     telefono: '912345678',
     email: 'ana@email.com',
     direccion: 'Jr. Lima 89',
     distrito: 'Surco',
-    contactoEmergencia: 'Pedro García — 998877665',
     aceptaDatos: true
   }
 ];
@@ -60,7 +54,7 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     castrado: true,
     estado: 'activo',
     fechaRegistro: '2023-01-10',
-    dueno: DUENOS_INICIALES[0]
+    duenoId: DUENOS_INICIALES[0].id
   },
   {
     id: '2',
@@ -75,7 +69,7 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     estado: 'activo',
     alergias: 'Polen (leve)',
     fechaRegistro: '2023-02-14',
-    dueno: DUENOS_INICIALES[1]
+    duenoId: DUENOS_INICIALES[1].id
   },
   {
     id: '3',
@@ -90,7 +84,22 @@ export const MASCOTAS_INICIALES: Mascota[] = [
     estado: 'en_tratamiento',
     observaciones: 'Control post-operatorio programado',
     fechaRegistro: '2022-06-01',
-    dueno: DUENOS_INICIALES[2]
+    duenoId: DUENOS_INICIALES[2].id
+  },
+  {
+    id: '4',
+    nombre: 'Copito',
+    especie: 'otro',
+    otraEspecie: 'Hámster',
+    raza: 'Sirio',
+    fechaNacimiento: '2024-02-10',
+    sexo: 'macho',
+    peso: 0.15,
+    color: 'Blanco',
+    castrado: false,
+    estado: 'activo',
+    fechaRegistro: '2024-03-01',
+    duenoId: DUENOS_INICIALES[0].id
   }
 ];
 
@@ -106,9 +115,6 @@ export const CITAS_INICIALES: Cita[] = [
   {
     id: 'c1',
     mascotaId: '1',
-    nombreMascota: 'Max',
-    nombreDueno: 'Carlos Mendoza',
-    telefonoDueno: '987654321',
     fecha: hoy(),
     hora: '09:00',
     tipo: 'consulta',
@@ -121,9 +127,6 @@ export const CITAS_INICIALES: Cita[] = [
   {
     id: 'c2',
     mascotaId: '2',
-    nombreMascota: 'Luna',
-    nombreDueno: 'María Torres',
-    telefonoDueno: '945678321',
     fecha: hoy(),
     hora: '11:30',
     tipo: 'vacuna',
@@ -135,9 +138,6 @@ export const CITAS_INICIALES: Cita[] = [
   {
     id: 'c3',
     mascotaId: '3',
-    nombreMascota: 'Rocky',
-    nombreDueno: 'Ana García',
-    telefonoDueno: '912345678',
     fecha: manana(),
     hora: '15:00',
     tipo: 'control',

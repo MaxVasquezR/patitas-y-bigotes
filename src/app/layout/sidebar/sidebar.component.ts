@@ -12,7 +12,7 @@ interface NavItem {
   etiqueta: string;
   icono: string;
   exact?: boolean;
-  permiso?: 'auditoria' | 'backup';
+  permiso?: 'auditoria' | 'backup' | 'gestionar_usuarios';
 }
 
 @Component({
@@ -33,7 +33,8 @@ export class SidebarComponent {
     { ruta: '/propietarios', etiqueta: 'Propietarios', icono: 'bi-people' },
     { ruta: '/citas', etiqueta: 'Agenda', icono: 'bi-calendar3' },
     { ruta: '/auditoria', etiqueta: 'Auditoría', icono: 'bi-shield-check', permiso: 'auditoria' },
-    { ruta: '/admin/datos', etiqueta: 'Datos del sistema', icono: 'bi-database', permiso: 'backup' }
+    { ruta: '/admin/datos', etiqueta: 'Datos del sistema', icono: 'bi-database', permiso: 'backup' },
+    { ruta: '/usuarios', etiqueta: 'Usuarios', icono: 'bi-person-gear', permiso: 'gestionar_usuarios' }
   ];
 
   readonly navItems = computed(() =>

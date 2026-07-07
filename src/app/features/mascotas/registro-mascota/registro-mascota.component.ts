@@ -7,7 +7,7 @@ import { DuenoService } from '../../../core/services/dueno.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { ESPECIES, SEXOS, ESTADOS_MASCOTA, TIPOS_DOCUMENTO } from '../../../core/constants/app.constants';
+import { ESPECIES, SEXOS, ESTADOS_MASCOTA } from '../../../core/constants/app.constants';
 import { Dueno } from '../../../core/models/mascota.model';
 import { PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 import { FormRequiredLegendComponent } from '../../../shared/components/form-required-legend/form-required-legend.component';
@@ -36,7 +36,6 @@ export class RegistroMascotaComponent implements OnInit {
   readonly especies = ESPECIES;
   readonly sexos = SEXOS;
   readonly estados = ESTADOS_MASCOTA;
-  readonly tiposDocumento = TIPOS_DOCUMENTO;
 
   constructor(
     private fb: FormBuilder,
@@ -51,6 +50,7 @@ export class RegistroMascotaComponent implements OnInit {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       especie: ['', Validators.required],
+      otraEspecie: ['', Validators.maxLength(50)],
       raza: ['', [Validators.required, Validators.maxLength(80)]],
       fechaNacimiento: ['', [Validators.required, noFutureDateValidator()]],
       sexo: ['', Validators.required],
@@ -65,10 +65,9 @@ export class RegistroMascotaComponent implements OnInit {
       dueno_id: [''],
       dueno_nombre: ['', [Validators.required, Validators.minLength(2)]],
       dueno_apellido: ['', [Validators.required, Validators.minLength(2)]],
-      dueno_tipoDocumento: ['DNI'],
       dueno_numeroDocumento: ['', [Validators.required, documentoValidator()]],
       dueno_telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-      dueno_email: ['', [Validators.required, Validators.email]],
+      dueno_email: ['', Validators.email],
       dueno_direccion: ['', [Validators.required, Validators.maxLength(200)]],
       dueno_distrito: ['', [Validators.required, Validators.maxLength(80)]]
     });
@@ -83,6 +82,17 @@ export class RegistroMascotaComponent implements OnInit {
       this.onDuenoSeleccionado();
     }
     this.form.get('dueno_modo')?.valueChanges.subscribe(m => this.setModoDueno(m as ModoDueno));
+    this.form.get('especie')?.valueChanges.subscribe(e => this.setOtraEspecieValidator(e));
+  }
+
+  private setOtraEspecieValidator(especie: string): void {
+    const ctrl = this.form.get('otraEspecie');
+    if (especie === 'otro') {
+      ctrl?.setValidators([Validators.required, Validators.maxLength(50)]);
+    } else {
+      ctrl?.setValidators([Validators.maxLength(50)]);
+    }
+    ctrl?.updateValueAndValidity();
   }
 
   setModoDueno(modo: ModoDueno): void {
@@ -105,7 +115,6 @@ export class RegistroMascotaComponent implements OnInit {
     this.form.patchValue({
       dueno_nombre: d.nombre,
       dueno_apellido: d.apellido,
-      dueno_tipoDocumento: d.tipoDocumento,
       dueno_numeroDocumento: d.numeroDocumento,
       dueno_telefono: d.telefono,
       dueno_email: d.email,
@@ -115,7 +124,7 @@ export class RegistroMascotaComponent implements OnInit {
   }
 
   paso1Valido(): boolean {
-    return ['nombre', 'especie', 'raza', 'fechaNacimiento', 'sexo', 'peso', 'color', 'estado']
+    return ['nombre', 'especie', 'otraEspecie', 'raza', 'fechaNacimiento', 'sexo', 'peso', 'color', 'estado']
       .every(k => this.form.get(k)?.valid);
   }
 
@@ -140,7 +149,7 @@ export class RegistroMascotaComponent implements OnInit {
       return;
     }
     const v = this.form.value;
-    let dueno: Dueno;
+    let duenoId: string;
 
     if (this.modoDueno() === 'existente') {
       const existente = this.duenoService.getDuenoById(v.dueno_id);
@@ -148,7 +157,7 @@ export class RegistroMascotaComponent implements OnInit {
         this.toastService.warning('Seleccione un propietario válido');
         return;
       }
-      dueno = existente;
+      duenoId = existente.id;
     } else {
       const dup = this.duenoService.existeDuplicado({
         numeroDocumento: v.dueno_numeroDocumento,
@@ -161,10 +170,9 @@ export class RegistroMascotaComponent implements OnInit {
       const creado = this.duenoService.addDueno({
         nombre: v.dueno_nombre,
         apellido: v.dueno_apellido,
-        tipoDocumento: v.dueno_tipoDocumento,
         numeroDocumento: v.dueno_numeroDocumento,
         telefono: v.dueno_telefono,
-        email: v.dueno_email,
+        email: v.dueno_email || undefined,
         direccion: v.dueno_direccion,
         distrito: v.dueno_distrito,
         aceptaDatos: true
@@ -173,12 +181,13 @@ export class RegistroMascotaComponent implements OnInit {
         this.toastService.warning(creado.error);
         return;
       }
-      dueno = creado.dueno;
+      duenoId = creado.dueno.id;
     }
 
     const mascota = this.mascotaService.addMascota({
       nombre: v.nombre,
       especie: v.especie,
+      otraEspecie: v.especie === 'otro' ? v.otraEspecie : undefined,
       raza: v.raza,
       fechaNacimiento: v.fechaNacimiento,
       sexo: v.sexo,
@@ -189,7 +198,7 @@ export class RegistroMascotaComponent implements OnInit {
       castrado: !!v.castrado,
       estado: v.estado,
       observaciones: v.observaciones || undefined,
-      dueno
+      duenoId
     });
 
     const s = this.auth.getSesionActual();
@@ -203,7 +212,7 @@ export class RegistroMascotaComponent implements OnInit {
     ['dueno_nombre', 'dueno_apellido', 'dueno_numeroDocumento', 'dueno_telefono', 'dueno_email', 'dueno_direccion', 'dueno_distrito']
       .forEach(k => this.form.get(k)?.setValidators(k.includes('telefono') ? [Validators.required, Validators.pattern(/^[0-9]{9}$/)] :
         k === 'dueno_numeroDocumento' ? [Validators.required, documentoValidator()] :
-        k === 'dueno_email' ? [Validators.required, Validators.email] :
+        k === 'dueno_email' ? [Validators.email] :
         [Validators.required]));
     this.form.updateValueAndValidity();
   }

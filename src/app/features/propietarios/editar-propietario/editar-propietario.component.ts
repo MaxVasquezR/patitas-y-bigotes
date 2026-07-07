@@ -3,16 +3,13 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DuenoService } from '../../../core/services/dueno.service';
-import { MascotaService } from '../../../core/services/mascota.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { TIPOS_DOCUMENTO } from '../../../core/constants/app.constants';
 import { PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 import { FormRequiredLegendComponent } from '../../../shared/components/form-required-legend/form-required-legend.component';
 import { getFormErrorMessage, isFieldInvalid } from '../../../shared/utils/form-errors.util';
 import { documentoValidator, scrollToFirstInvalid } from '../../../shared/utils/form-validators.util';
-import { normalizarDueno } from '../../../core/utils/entity-normalizers';
 
 @Component({
   selector: 'app-editar-propietario',
@@ -26,14 +23,12 @@ export class EditarPropietarioComponent implements OnInit {
   form: FormGroup;
   propietarioId = '';
   noEncontrado = false;
-  readonly tiposDocumento = TIPOS_DOCUMENTO;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private duenoService: DuenoService,
-    private mascotaService: MascotaService,
     private auth: AuthService,
     private audit: AuditService,
     private toast: ToastService
@@ -41,14 +36,11 @@ export class EditarPropietarioComponent implements OnInit {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
       apellido: ['', [Validators.required, Validators.minLength(2)]],
-      tipoDocumento: ['DNI', Validators.required],
       numeroDocumento: ['', [Validators.required, documentoValidator()]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-      telefonoAlt: ['', Validators.pattern(/^[0-9]{9}$/)],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', Validators.email],
       direccion: ['', [Validators.required, Validators.maxLength(200)]],
-      distrito: ['', [Validators.required, Validators.maxLength(80)]],
-      contactoEmergencia: ['', Validators.maxLength(120)]
+      distrito: ['', [Validators.required, Validators.maxLength(80)]]
     });
   }
 
@@ -81,13 +73,10 @@ export class EditarPropietarioComponent implements OnInit {
       return;
     }
 
-    const dueno = normalizarDueno({ ...actual!, ...v });
-    this.mascotaService.syncDuenoEnMascotas(dueno);
-
     const s = this.auth.getSesionActual();
     if (s) this.audit.registrar(s.nombre, s.rol, 'EDITAR', `Propietario ${v.nombre} ${v.apellido} actualizado`);
 
-    this.toast.success('Propietario actualizado en todas las fichas vinculadas');
+    this.toast.success('Propietario actualizado correctamente');
     this.router.navigate(['/propietarios', this.propietarioId]);
   }
 

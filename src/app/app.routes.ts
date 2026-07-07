@@ -82,6 +82,11 @@ export const routes: Routes = [
           import('./features/historial/historial-mascota/historial-mascota.component').then(m => m.HistorialMascotaComponent)
       },
       {
+        path: 'atencion/:citaId',
+        loadComponent: () =>
+          import('./features/atencion/atender-cita/atender-cita.component').then(m => m.AtenderCitaComponent)
+      },
+      {
         path: 'auditoria',
         canActivate: [roleGuard('admin')],
         loadComponent: () =>
@@ -92,6 +97,24 @@ export const routes: Routes = [
         canActivate: [roleGuard('admin')],
         loadComponent: () =>
           import('./features/admin/admin-datos/admin-datos.component').then(m => m.AdminDatosComponent)
+      },
+      {
+        path: 'usuarios',
+        canActivate: [roleGuard('admin')],
+        loadComponent: () =>
+          import('./features/admin/usuarios/lista-usuarios/lista-usuarios.component').then(m => m.ListaUsuariosComponent)
+      },
+      {
+        path: 'usuarios/nuevo',
+        canActivate: [roleGuard('admin')],
+        loadComponent: () =>
+          import('./features/admin/usuarios/registro-usuario/registro-usuario.component').then(m => m.RegistroUsuarioComponent)
+      },
+      {
+        path: 'usuarios/:id/editar',
+        canActivate: [roleGuard('admin')],
+        loadComponent: () =>
+          import('./features/admin/usuarios/editar-usuario/editar-usuario.component').then(m => m.EditarUsuarioComponent)
       }
     ]
   },

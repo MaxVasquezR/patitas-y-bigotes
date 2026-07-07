@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MascotaService } from '../../../core/services/mascota.service';
+import { DuenoService } from '../../../core/services/dueno.service';
 import { CitaService } from '../../../core/services/cita.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuditService } from '../../../core/services/audit.service';
@@ -39,8 +40,13 @@ export class ListaMascotasComponent {
 
   readonly puedeEliminar = computed(() => this.auth.puedeEliminar());
 
+  dueno(duenoId: string) {
+    return this.duenoService.getDuenoById(duenoId);
+  }
+
   constructor(
     private mascotaService: MascotaService,
+    private duenoService: DuenoService,
     private citaService: CitaService,
     private auth: AuthService,
     private audit: AuditService,

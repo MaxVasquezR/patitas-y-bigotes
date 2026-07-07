@@ -1,7 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { SesionUsuario, RolUsuario } from '../models/usuario.model';
-import { USUARIOS_DEMO } from '../constants/usuarios.constants';
+import { UsuarioService } from './usuario.service';
 import { StorageService } from './storage.service';
 import { AuditService } from './audit.service';
 
@@ -14,7 +14,8 @@ export type Permiso =
   | 'cancelar_cita'
   | 'auditoria'
   | 'backup'
-  | 'editar_historial_antiguo';
+  | 'editar_historial_antiguo'
+  | 'gestionar_usuarios';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -30,17 +31,16 @@ export class AuthService {
   constructor(
     private storage: StorageService,
     private audit: AuditService,
-    private router: Router
+    private router: Router,
+    private usuarioService: UsuarioService
   ) {
     const saved = this.storage.getSession<SesionUsuario>(SESSION_KEY);
     if (saved) this._sesion.set(saved);
   }
 
   login(username: string, password: string): boolean {
-    const user = USUARIOS_DEMO.find(
-      u => u.username === username && u.password === password && u.activo
-    );
-    if (!user) return false;
+    const user = this.usuarioService.findByUsername(username);
+    if (!user || user.password !== password || !user.activo) return false;
 
     const sesion: SesionUsuario = {
       id: user.id,
@@ -70,7 +70,7 @@ export class AuthService {
   }
 
   tienePermiso(permiso: Permiso): boolean {
-    const adminOnly: Permiso[] = ['eliminar', 'auditoria', 'backup', 'editar_historial_antiguo'];
+    const adminOnly: Permiso[] = ['eliminar', 'auditoria', 'backup', 'editar_historial_antiguo', 'gestionar_usuarios'];
     if (adminOnly.includes(permiso)) return this.isAdmin();
     return this.isAuthenticated();
   }
@@ -82,6 +82,7 @@ export class AuthService {
   puedeVerAuditoria(): boolean { return this.tienePermiso('auditoria'); }
   puedeBackup(): boolean { return this.tienePermiso('backup'); }
   puedeCancelarCita(): boolean { return this.tienePermiso('cancelar_cita'); }
+  puedeGestionarUsuarios(): boolean { return this.tienePermiso('gestionar_usuarios'); }
 
   mensajeSinPermiso(accion = 'realizar esta acción'): string {
     return `Solo el administrador puede ${accion}. Su rol actual es: ${this.rolLabel()}.`;

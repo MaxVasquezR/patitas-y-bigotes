@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CitaService } from '../../../core/services/cita.service';
+import { MascotaService } from '../../../core/services/mascota.service';
+import { DuenoService } from '../../../core/services/dueno.service';
 import { Cita, EstadoCita } from '../../../core/models/cita.model';
 import { CitaEntity } from '../../../core/models/entities/cita.entity';
 import { AuthService } from '../../../core/services/auth.service';
@@ -65,6 +67,8 @@ export class AgendaCitasComponent {
 
   constructor(
     private citaService: CitaService,
+    private mascotaService: MascotaService,
+    private duenoService: DuenoService,
     private auth: AuthService,
     private audit: AuditService,
     private confirmService: ConfirmService,
@@ -78,18 +82,32 @@ export class AgendaCitasComponent {
     return CitaEntity.from(cita);
   }
 
+  nombreMascota(cita: Cita): string {
+    return this.mascotaService.getMascotaById(cita.mascotaId)?.nombre ?? '';
+  }
+
+  nombreDueno(cita: Cita): string {
+    const m = this.mascotaService.getMascotaById(cita.mascotaId);
+    const d = m ? this.duenoService.getDuenoById(m.duenoId) : undefined;
+    return d ? `${d.nombre} ${d.apellido}` : '';
+  }
+
+  telefonoDueno(cita: Cita): string {
+    const m = this.mascotaService.getMascotaById(cita.mascotaId);
+    const d = m ? this.duenoService.getDuenoById(m.duenoId) : undefined;
+    return d?.telefono ?? '';
+  }
+
   cambiarEstado(id: string, estado: EstadoCita): void {
     const cita = this.citaService.getCitaById(id);
     this.citaService.updateEstado(id, estado);
     const s = this.auth.getSesionActual();
-    if (s && cita) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${cita.nombreMascota} → ${estado}`);
+    if (s && cita) this.audit.registrar(s.nombre, s.rol, 'ACTUALIZAR', `Cita ${this.nombreMascota(cita)} → ${estado}`);
     this.toastService.success(`Cita ${estado}`);
   }
 
   completarCita(cita: Cita): void {
-    this.router.navigate(['/historial', cita.mascotaId], {
-      queryParams: { citaId: cita.id, nuevo: '1' }
-    });
+    this.router.navigate(['/atencion', cita.id]);
   }
 
   async eliminar(id: string): Promise<void> {
@@ -98,7 +116,7 @@ export class AgendaCitasComponent {
       const cita = this.citaService.getCitaById(id);
       this.citaService.deleteCita(id);
       const s = this.auth.getSesionActual();
-      if (s && cita) this.audit.registrar(s.nombre, s.rol, 'ELIMINAR', `Cita ${cita.nombreMascota} eliminada`);
+      if (s && cita) this.audit.registrar(s.nombre, s.rol, 'ELIMINAR', `Cita ${this.nombreMascota(cita)} eliminada`);
       this.toastService.success('Cita eliminada');
     }
   }

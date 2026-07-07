@@ -49,6 +49,10 @@ export class DetallePropietarioComponent {
 
   readonly puedeEliminar = computed(() => this.auth.puedeEliminarPropietario());
 
+  nombreMascota(mascotaId: string): string {
+    return this.mascotaService.getMascotaById(mascotaId)?.nombre ?? '';
+  }
+
   constructor(
     private route: ActivatedRoute,
     private duenoService: DuenoService,

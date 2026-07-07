@@ -29,19 +29,19 @@
             </span>
             <div class="min-w-0">
               <h3 class="h6 fw-semibold mb-0 text-truncate">{{ m.nombre }}</h3>
-              <span class="badge bg-light text-dark border mt-1">{{ m.especie | especie: 'label' }}</span>
+              <span class="badge bg-light text-dark border mt-1">{{ m.especie === 'otro' ? m.otraEspecie : (m.especie | especie: 'label') }}</span>
               <p class="text-muted small mb-0 mt-1">{{ m.raza }}</p>
             </div>
           </div>
           <dl class="row small mb-0 g-1">
             <dt class="col-5 text-muted fw-normal">Propietario</dt>
-            <dd class="col-7 mb-1">{{ m.dueno.nombre }} {{ m.dueno.apellido }}</dd>
+            <dd class="col-7 mb-1">{{ dueno(m.duenoId)?.nombre }} {{ dueno(m.duenoId)?.apellido }}</dd>
             <dt class="col-5 text-muted fw-normal">Edad</dt>
             <dd class="col-7 mb-1">{{ m.fechaNacimiento | edad }}</dd>
             <dt class="col-5 text-muted fw-normal">Peso</dt>
             <dd class="col-7 mb-1">{{ m.peso }} kg</dd>
             <dt class="col-5 text-muted fw-normal">Teléfono</dt>
-            <dd class="col-7 mb-0">{{ m.dueno.telefono | telefono }}</dd>
+            <dd class="col-7 mb-0">{{ (dueno(m.duenoId)?.telefono ?? '') | telefono }}</dd>
           </dl>
         </div>
         <div class="card-footer bg-white d-flex flex-wrap gap-2">

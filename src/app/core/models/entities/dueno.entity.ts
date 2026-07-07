@@ -7,7 +7,6 @@ export class DuenoEntity {
   get nombre(): string { return this.data.nombre; }
   get apellido(): string { return this.data.apellido; }
   get telefono(): string { return this.data.telefono; }
-  get email(): string { return this.data.email; }
   get direccion(): string { return this.data.direccion; }
 
   get nombreCompleto(): string {
